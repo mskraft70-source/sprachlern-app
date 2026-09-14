@@ -1,0 +1,571 @@
+<title>Der Ebenen-Check</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Spectral:ital,wght@0,400;0,600;1,400&display=swap">
+<style>
+  :root{
+    --paper:#E4E7EC; --surface:#F6F7F9; --surface-2:#FFFFFF;
+    --ink:#101E2E; --ink-2:#4A5C6F; --ink-3:#71818F;
+    --line:#BFC8D3; --line-strong:#8C9AA9;
+    --mark:#C2392A; --ok:#276B4F;
+    --b1:#F1F3F6; --b2:#E6EAEF; --b3:#D6DEE7; --b4:#DBE5EF; --b5a:#C7D4DE; --b5b:#E4E7EC;
+    --plan:#3E6A94; --dot:rgba(16,30,46,.22); --hatch:rgba(16,30,46,.13);
+    --display:'Spectral',Georgia,'Times New Roman',serif;
+    --body:'IBM Plex Sans',system-ui,-apple-system,Segoe UI,sans-serif;
+    --mono:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
+    --shadow:0 1px 2px rgba(16,30,46,.06);
+  }
+  @media (prefers-color-scheme:dark){
+    :root:not([data-theme="light"]){
+      --paper:#0B1420; --surface:#121D2B; --surface-2:#182636;
+      --ink:#DFE7EF; --ink-2:#9BAABA; --ink-3:#7A8A9A;
+      --line:#2A3A4C; --line-strong:#48607A;
+      --mark:#E2705C; --ok:#58B98C;
+      --b1:#16222E; --b2:#1B2836; --b3:#22313F; --b4:#1A2D40; --b5a:#1E2C39; --b5b:#0F1926;
+      --plan:#5C93C2; --dot:rgba(223,231,239,.24); --hatch:rgba(223,231,239,.12);
+      --shadow:0 1px 2px rgba(0,0,0,.35);
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:#0B1420; --surface:#121D2B; --surface-2:#182636;
+    --ink:#DFE7EF; --ink-2:#9BAABA; --ink-3:#7A8A9A;
+    --line:#2A3A4C; --line-strong:#48607A;
+    --mark:#E2705C; --ok:#58B98C;
+    --b1:#16222E; --b2:#1B2836; --b3:#22313F; --b4:#1A2D40; --b5a:#1E2C39; --b5b:#0F1926;
+    --plan:#5C93C2; --dot:rgba(223,231,239,.24); --hatch:rgba(223,231,239,.12);
+    --shadow:0 1px 2px rgba(0,0,0,.35);
+  }
+
+  *{box-sizing:border-box}
+  body{background:var(--paper);color:var(--ink);font-family:var(--body);line-height:1.6;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1140px;margin:0 auto;padding-inline:20px;padding-block:32px 56px}
+  h1,h2,h3{font-family:var(--display);font-weight:600;text-wrap:balance;margin:0;line-height:1.22}
+  p{margin:0}
+  button{font:inherit;color:inherit}
+
+  /* ---------- Kopf ---------- */
+  .masthead{border-bottom:1px solid var(--line);padding-bottom:22px;margin-bottom:28px}
+  .eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin-bottom:12px}
+  .masthead h1{font-size:clamp(34px,6vw,54px);letter-spacing:-.015em}
+  .masthead .sub{font-family:var(--display);font-style:italic;font-size:clamp(16px,2.4vw,19px);color:var(--ink-2);margin-top:8px;max-width:58ch}
+
+  /* ---------- Bühne ---------- */
+  .stage{display:grid;grid-template-columns:1fr;gap:26px;align-items:start}
+  @media (min-width:920px){ .stage{grid-template-columns:300px minmax(0,1fr);gap:40px} .schnitt{position:sticky;top:20px} }
+
+  /* ---------- Schnitt ---------- */
+  .schnitt-head{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:10px}
+  .schnitt-head .t{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3)}
+  .bands{display:flex;flex-direction:column;gap:3px}
+  .band{display:grid;grid-template-columns:34px 1fr 20px;align-items:center;gap:10px;width:100%;text-align:left;
+    border:1px solid var(--line);background:var(--b1);color:var(--ink);padding:11px 12px;border-radius:2px;cursor:default;
+    transition:transform .18s ease,border-color .18s ease,background .18s ease}
+  .band .code{font-family:var(--mono);font-size:11px;color:var(--ink-3);letter-spacing:.04em}
+  .band .bname{font-family:var(--display);font-size:17px;font-weight:600;display:block;line-height:1.25}
+  .band .bterm{font-size:12.5px;color:var(--ink-2);display:block}
+  .band .mk{font-family:var(--mono);font-size:15px;text-align:center;color:transparent}
+  .band[data-id="waende"]{background:
+    repeating-linear-gradient(45deg,transparent 0 6px,var(--hatch) 6px 7px),var(--b2)}
+  .band[data-id="fundament"]{background:
+    radial-gradient(var(--dot) .9px,transparent .9px) 0 0/7px 7px,var(--b3)}
+  .band[data-id="bauplan"]{background:
+    repeating-linear-gradient(0deg,transparent 0 9px,var(--hatch) 9px 10px),
+    repeating-linear-gradient(90deg,transparent 0 9px,var(--hatch) 9px 10px),var(--b4);
+    border-style:dashed;border-color:var(--plan)}
+  .band[data-id="landschaft"]{background:linear-gradient(180deg,var(--b5a),var(--b5b));border-color:var(--line-strong)}
+  .is-live .band{cursor:pointer}
+  .is-live .band:hover,.is-live .band:focus-visible{border-color:var(--ink);transform:translateX(4px)}
+  .band:focus-visible{outline:2px solid var(--mark);outline-offset:2px}
+  .band.picked{border-color:var(--ink);box-shadow:inset 3px 0 0 var(--ink)}
+  .band.correct{border-color:var(--ok);box-shadow:inset 3px 0 0 var(--ok)}
+  .band.correct .mk{color:var(--ok)}
+  .band.wrong{border-color:var(--mark);border-style:dashed;box-shadow:inset 3px 0 0 var(--mark)}
+  .band.wrong .mk{color:var(--mark)}
+  .band.dim{opacity:.5}
+  .schnitt-note{font-size:12.5px;color:var(--ink-3);margin-top:12px;border-top:1px solid var(--line);padding-top:10px}
+
+  /* ---------- Fall ---------- */
+  .case{min-width:0}
+  .casebar{display:flex;align-items:center;justify-content:space-between;gap:14px;font-family:var(--mono);font-size:11.5px;
+    letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);border-bottom:1px solid var(--line);padding-bottom:9px;margin-bottom:18px}
+  .casebar .pts{color:var(--ink-2);font-variant-numeric:tabular-nums}
+  .kat{display:inline-block;font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;
+    color:var(--ink-2);border:1px solid var(--line);padding:3px 8px;border-radius:2px;margin-bottom:14px}
+  .case h2{font-size:clamp(25px,4vw,33px);letter-spacing:-.01em}
+  .szenario{font-family:var(--display);font-size:clamp(17px,2.3vw,18.5px);line-height:1.68;color:var(--ink);margin-top:14px;max-width:64ch}
+  .gelesen .szenario{color:var(--ink-2)}
+
+  .frage{margin-top:30px}
+  .frage-t{font-family:var(--mono);font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:var(--ink-3);margin-bottom:7px}
+  .frage-q{font-family:var(--display);font-size:20px;font-weight:600;max-width:52ch}
+  .hinweis{font-size:13.5px;color:var(--ink-2);margin-top:6px}
+
+  .opts{display:flex;flex-direction:column;gap:9px;margin-top:16px}
+  .opt{display:grid;grid-template-columns:24px 1fr;gap:12px;align-items:start;text-align:left;width:100%;
+    background:var(--surface);border:1px solid var(--line);border-radius:2px;padding:14px 15px;cursor:pointer;
+    transition:border-color .16s ease,background .16s ease}
+  .opt .ltr{font-family:var(--mono);font-size:12px;color:var(--ink-3);padding-top:3px}
+  .opt:hover{border-color:var(--ink);background:var(--surface-2)}
+  .opt:focus-visible{outline:2px solid var(--mark);outline-offset:2px}
+  .opt[disabled]{cursor:default}
+  .opt.chosen{border-color:var(--ink);background:var(--surface-2)}
+  .opt.best{border-color:var(--ok);box-shadow:inset 3px 0 0 var(--ok)}
+  .opt.miss{border-color:var(--mark);border-style:dashed}
+  .opt.faded{opacity:.66}
+  .fb{font-size:14.5px;color:var(--ink-2);margin-top:9px;padding-top:9px;border-top:1px solid var(--line);max-width:62ch}
+  .fb .tag{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;margin-right:8px}
+  .tag.t-ok{color:var(--ok)} .tag.t-miss{color:var(--mark)} .tag.t-mid{color:var(--ink-3)}
+
+  .aufloesung{margin-top:22px;background:var(--surface);border:1px solid var(--line);border-left:3px solid var(--ink);
+    border-radius:2px;padding:18px 20px}
+  .aufloesung .t{font-family:var(--mono);font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--ink-3);margin-bottom:8px}
+  .aufloesung p{font-size:15.5px;line-height:1.65;max-width:62ch}
+
+  .regel{margin-top:26px;border-top:1px solid var(--line-strong);border-bottom:1px solid var(--line-strong);padding-block:20px}
+  .regel .t{font-family:var(--mono);font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--mark);margin-bottom:9px}
+  .regel p{font-family:var(--display);font-size:clamp(19px,2.8vw,23px);line-height:1.42;max-width:44ch;font-style:italic}
+  .regel .quelle{font-family:var(--mono);font-size:11px;color:var(--ink-3);margin-top:12px;font-style:normal;max-width:none}
+
+  .actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:24px;align-items:center}
+  .btn{background:var(--ink);color:var(--paper);border:1px solid var(--ink);padding:12px 22px;border-radius:2px;cursor:pointer;
+    font-size:15px;font-weight:500;transition:opacity .16s ease}
+  .btn:hover{opacity:.86}
+  .btn:focus-visible{outline:2px solid var(--mark);outline-offset:2px}
+  .btn.ghost{background:transparent;color:var(--ink);border-color:var(--line-strong)}
+
+  /* ---------- Intro / Auswertung ---------- */
+  .intro p{font-size:16.5px;color:var(--ink-2);max-width:62ch;margin-top:14px}
+  .intro .lead{font-family:var(--display);font-size:clamp(18px,2.6vw,21px);color:var(--ink);line-height:1.6}
+  .schritte{list-style:none;padding:0;margin:24px 0 0;display:flex;flex-direction:column;gap:2px;counter-reset:s}
+  .schritte li{display:grid;grid-template-columns:32px 1fr;gap:14px;padding:13px 0;border-top:1px solid var(--line);align-items:baseline}
+  .schritte li:last-child{border-bottom:1px solid var(--line)}
+  .schritte li::before{counter-increment:s;content:counter(s,decimal-leading-zero);font-family:var(--mono);font-size:11.5px;color:var(--ink-3)}
+  .schritte b{font-weight:600}
+  .schritte span{font-size:15px;color:var(--ink-2);display:block;margin-top:2px}
+
+  .ergebnis .zahl{font-family:var(--display);font-size:clamp(56px,13vw,86px);line-height:1;font-variant-numeric:tabular-nums}
+  .ergebnis .zahl small{font-size:.32em;color:var(--ink-3);font-family:var(--mono);margin-left:10px;letter-spacing:.06em}
+  .ergebnis .titel{font-family:var(--display);font-size:clamp(23px,4vw,30px);margin-top:10px}
+  .ergebnis .deutung{font-size:16px;color:var(--ink-2);margin-top:12px;max-width:60ch}
+  .bilanz{margin-top:30px;border-top:1px solid var(--line)}
+  .bilanz .row{display:grid;grid-template-columns:34px 1fr 96px 46px;gap:12px;align-items:center;padding:11px 0;border-bottom:1px solid var(--line)}
+  .bilanz .c{font-family:var(--mono);font-size:11px;color:var(--ink-3)}
+  .bilanz .n{font-family:var(--display);font-size:16px}
+  .bilanz .n em{font-style:normal;color:var(--ink-3);font-family:var(--body);font-size:13px;margin-left:8px}
+  .meter{height:7px;background:var(--b2);border:1px solid var(--line);border-radius:1px;overflow:hidden}
+  .meter i{display:block;height:100%;background:var(--ok)}
+  .bilanz .v{font-family:var(--mono);font-size:12.5px;text-align:right;font-variant-numeric:tabular-nums;color:var(--ink-2)}
+  .weiter{margin-top:30px;background:var(--surface);border:1px solid var(--line);border-radius:2px;padding:20px}
+  .weiter h3{font-size:19px}
+  .weiter ul{margin:12px 0 0;padding-left:18px;color:var(--ink-2);font-size:15px}
+  .weiter li{margin-bottom:6px}
+  .weiter .q{font-family:var(--display);font-style:italic;color:var(--ink)}
+
+  footer{margin-top:52px;border-top:1px solid var(--line);padding-top:16px;font-size:12.5px;color:var(--ink-3);max-width:70ch}
+  @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+
+<div class="wrap">
+  <header class="masthead">
+    <p class="eyebrow">Marc Steffen Kraft &middot; Die unsichtbaren Spielregeln</p>
+    <h1>Der Ebenen-Check</h1>
+    <p class="sub">Zehn Konflikte. Die Frage ist nie, wer recht hat &mdash; sondern auf welcher Etage gestritten wird.</p>
+  </header>
+
+  <main class="stage">
+    <aside class="schnitt">
+      <div class="schnitt-head"><span class="t">Der Schnitt</span><span class="t" id="schnittState">Fünf Ebenen</span></div>
+      <div class="bands" id="bands"></div>
+      <p class="schnitt-note" id="schnittNote">Der Bauplan ist gestrichelt gezeichnet: Er liegt nicht tiefer als das Fundament, sondern quer zu allem.</p>
+    </aside>
+    <section class="case" id="case"></section>
+  </main>
+
+  <footer>
+    Die Fälle sind für dieses Spiel geschrieben. Die Haus-Metapher, die fünf Ebenen, der Ebenen-Sprung und die sechs Fragen des Ebenen-Checks stammen aus dem Buch &bdquo;Die unsichtbaren Spielregeln &ndash; Wie Weltbilder entstehen, uns prägen und Konflikte schaffen&ldquo;.
+  </footer>
+</div>
+
+<script>
+const EBENEN=[
+ {id:"moebel",code:"E1",name:"Möbel",term:"Meinungen"},
+ {id:"waende",code:"E2",name:"Wände",term:"Wissen"},
+ {id:"fundament",code:"E3",name:"Fundament",term:"Prämissen"},
+ {id:"bauplan",code:"E4",name:"Bauplan",term:"Narrativ"},
+ {id:"landschaft",code:"E5",name:"Landschaft",term:"Weltbild"}
+];
+const TIEFE={moebel:1,waende:2,fundament:3,bauplan:4,landschaft:5};
+
+const FAELLE=[
+{
+ kat:"Team", titel:"Drei Tage Büro",
+ szenario:"Im Leitungskreis wird seit Wochen über die Anwesenheitsregel gestritten. Zwei Tage, drei Tage, feste oder freie Wahl. Es gibt Tabellen, Auslastungszahlen und einen Kompromissvorschlag, der schon zweimal gescheitert ist. Jedes Mal, wenn eine Einigung nah scheint, kippt die Stimmung. Niemand kann sagen, warum.",
+ ebene:"fundament",
+ aufloesung:"Verhandelt werden Tage. Gemeint ist ein Menschenbild. Die eine Seite geht von der Annahme aus: Menschen arbeiten, weil die Arbeit ihnen etwas bedeutet. Die andere: Menschen arbeiten, solange jemand hinsieht. Keiner dieser Sätze wird ausgesprochen &mdash; und solange sie unausgesprochen bleiben, sind sie unverhandelbar. Deshalb kippt jeder Kompromiss: Er ist ein Möbelstück in einem Streit ums Fundament.",
+ frage2:"Du leitest die nächste Sitzung. Was tust du?",
+ optionen:[
+  {t:"Einen vierten Kompromissvorschlag vorbereiten &mdash; diesmal mit besseren Zahlen.",e:"moebel",p:0,f:"Das fünfte Sofa im selben Zimmer. Die Zahlen waren nie das Problem."},
+  {t:"Eine Studie zur Produktivität im Homeoffice vorstellen.",e:"waende",p:1,f:"Wände statt Fundament. Jede Seite liest die Studie durch ihre Grundannahme &mdash; sie ist in beide Richtungen bestätigungsfähig."},
+  {t:"Die Runde bitten, einen Satz zu vervollständigen: &bdquo;Menschen arbeiten gut, wenn &hellip;&ldquo;",e:"fundament",p:2,f:"Genau dort liegt der Konflikt. Der Satz holt die unausgesprochene Prämisse an die Oberfläche, ohne jemanden anzugreifen. Ab hier wird verhandelbar, was vorher nur wirkte."},
+  {t:"Entscheiden und Schluss. Du hast die Autorität.",e:"moebel",p:0,f:"Die Entscheidung beendet die Sitzung, nicht den Konflikt. Er kommt wieder &mdash; unter anderem Namen, in drei Monaten."}
+ ],
+ regel:"Wer über Möbel streitet und das Fundament meint, verliert jeden Kompromiss. Auch den guten.",
+ quelle:"Kapitel 1 · Die fünf Ebenen / Der Ebenen-Sprung"
+},
+{
+ kat:"Projekt", titel:"Die Zahl, die nicht stimmt",
+ szenario:"Zwei Kolleginnen streiten über die Abbruchquote im Onboarding. Die eine sagt zwölf Prozent, die andere dreißig. Beide argumentieren seit zwanzig Minuten, beide werden lauter. Dann fällt der Satz: &bdquo;Du willst es einfach nicht sehen.&ldquo;",
+ ebene:"waende",
+ aufloesung:"Nicht jeder hitzige Streit ist tief. Hier beziehen sich zwei Menschen auf zwei Datensätze: Die eine zählt Abbrüche in den ersten dreißig Tagen, die andere im ersten Jahr. Das ist ein Wandkonflikt &mdash; Wissen, Quellen, Definitionen &mdash; und er ist in zehn Minuten gelöst, sobald jemand fragt, was genau gezählt wurde. Die Lautstärke täuscht Tiefe vor.",
+ frage2:"Was hilft hier wirklich?",
+ optionen:[
+  {t:"Fragen, welche Definition und welcher Zeitraum hinter jeder Zahl steht.",e:"waende",p:2,f:"Richtige Etage, kleinster Aufwand. Die meisten Faktenstreits sind Definitionsstreits."},
+  {t:"Fragen, welches Menschenbild hinter der jeweiligen Sicht steht.",e:"fundament",p:0,f:"Ein Ebenen-Sprung nach unten. Das Werkzeug ist gut, die Etage falsch &mdash; und es wirkt übergriffig, wo eine sachliche Frage gereicht hätte."},
+  {t:"Die Diskussion vertagen, bis sich die Gemüter beruhigt haben.",e:"moebel",p:1,f:"Vertagen schadet nicht, löst aber nichts. Morgen steht dieselbe Frage, nur leiser."},
+  {t:"Eine dritte, unabhängige Auswertung beauftragen.",e:"waende",p:1,f:"Richtige Etage, teurer Weg. Meist genügt die Frage nach der Definition."}
+ ],
+ regel:"Tiefe ist kein Verdienst. Wer jeden Sachstreit zum Weltbildkonflikt erklärt, hat das Werkzeug selbst zum Möbelstück gemacht.",
+ quelle:"Ebenen-Check · Die Gefahr der Ritualisierung"
+},
+{
+ kat:"Organisation", titel:"Lauter plakatieren",
+ szenario:"Ein Traditionsverlag verliert seit sechs Jahren Leser. Die Antwort war jedes Jahr dieselbe: eine neue Kampagne, ein frischeres Logo, ein mutigerer Claim. Die Kampagnen sind gut. Die Zahlen fallen weiter. In der Konferenz sagt jemand: &bdquo;Wir müssen noch sichtbarer werden.&ldquo;",
+ ebene:"landschaft",
+ aufloesung:"Nicht das Haus ist das Problem, sondern die Landschaft, in der es steht. Wie Menschen lesen, wofür sie zahlen, wo sie ihre Aufmerksamkeit lassen &mdash; das hat sich verschoben. Der Verlag antwortet mit Möbeln, neuer Anstrich, neues Sofa, und wundert sich, dass das Haus dadurch nicht stabiler wird. Ein Weltbild, das einmal stimmte, ist zur Landkarte einer verschwundenen Gegend geworden.",
+ frage2:"Welche Frage fehlt in dieser Konferenz?",
+ optionen:[
+  {t:"&bdquo;Welcher Claim wäre mutiger?&ldquo;",e:"moebel",p:0,f:"Die siebte Kampagne. Sie wird wieder gut sein und wieder nichts ändern."},
+  {t:"&bdquo;Welche Zielgruppe haben wir übersehen?&ldquo;",e:"waende",p:1,f:"Bessere Frage, immer noch im Haus. Sie setzt voraus, dass das Gebäude passt und nur die Bewohner fehlen."},
+  {t:"&bdquo;Wofür bezahlen Menschen heute überhaupt noch &mdash; und was davon können wir?&ldquo;",e:"landschaft",p:2,f:"Die Frage verlässt das Haus. Erst draußen sieht man, dass sich das Klima geändert hat."},
+  {t:"&bdquo;Warum glauben wir eigentlich, dass Reichweite unser Problem ist?&ldquo;",e:"bauplan",p:1,f:"Stark &mdash; sie prüft die Geschichte, die der Verlag über sich erzählt. Ein halber Schritt nach draußen."}
+ ],
+ regel:"Die Landschaft tritt nur ins Blickfeld, wenn man das Haus verlässt. Genau deshalb sieht man sie so selten.",
+ quelle:"Kapitel 1 · Normalitätsbias / Der Ebenen-Sprung"
+},
+{
+ kat:"Persönlich", titel:"Die Krise zieht mit um",
+ szenario:"Neuer Job, neue Stadt, neue Wohnung. Nach acht Monaten ist das Gefühl zurück, das er hinter sich lassen wollte: zu viel auf den Schultern, niemand, den man fragen kann, und die leise Gewissheit, dass es auch niemanden geben wird. Er beginnt wieder, Stellenanzeigen zu lesen.",
+ ebene:"fundament",
+ aufloesung:"Drei Möbelstücke ausgetauscht, das Fundament unberührt. Darunter liegt ein Satz, der nie als Annahme erkannt wurde, weil er sich wie ein Charakterzug anfühlt: &bdquo;Ich bin jemand, der alleine klarkommen muss.&ldquo; Solche Sätze klingen nach Selbsterkenntnis. Meist sind sie geerbt. Und sie ziehen zuverlässig mit um.",
+ frage2:"Was bringt ihn weiter?",
+ optionen:[
+  {t:"Noch einmal wechseln &mdash; diesmal die richtige Stadt.",e:"moebel",p:0,f:"Das vierte Möbelstück. Die Adresse ändert sich, der Satz nicht."},
+  {t:"Aufschreiben, wann er diesen Satz zum ersten Mal gedacht hat &mdash; und von wem er stammen könnte.",e:"fundament",p:2,f:"Das ist die Kartierung des eigenen Fundaments. Nicht, um den Satz sofort loszuwerden &mdash; sondern um zu sehen, dass es ein Satz ist und nicht der Boden der Erde."},
+  {t:"Sich vornehmen, öfter um Hilfe zu bitten.",e:"moebel",p:1,f:"Ein neues Möbelstück im alten Zimmer. Nützlich, aber es hält nur, solange der Vorsatz hält."},
+  {t:"Prüfen, ob die Überlastung real ist: Stunden zählen, Aufgaben auflisten.",e:"waende",p:1,f:"Wände zu prüfen ist vernünftig und manchmal genug. Hier war die Statik schon an drei Orten nicht das Problem."}
+ ],
+ regel:"Was du nie hinterfragst, bestimmt dich am stärksten. Prämissen wechseln nicht die Adresse.",
+ quelle:"Kapitel 16 · Das eigene Weltbild kartieren"
+},
+{
+ kat:"Familie", titel:"Wer pflegt die Mutter",
+ szenario:"Drei Geschwister, ein Pflegefall, ein Tisch. Es geht um Geld, um Wochenenden, um ein Heim, das gut wäre und zu teuer ist. Die Schwester sagt: &bdquo;Man gibt seine Mutter nicht weg.&ldquo; Der Bruder sagt: &bdquo;Jeder hat sein eigenes Leben.&ldquo; Sie hält ihn für herzlos, er sie für naiv.",
+ ebene:"bauplan",
+ aufloesung:"Die Fakten sind unstrittig: dieselben Kosten, dieselben Termine, dieselbe Mutter. Verschieden ist die Geschichte, in die diese Fakten eingeordnet werden. Die eine heißt: Eine Familie trägt, was zu tragen ist. Die andere: Jeder ist für sein Leben verantwortlich. Das sind keine Meinungen, und es ist auch nicht je eine einzelne Prämisse &mdash; es sind Baupläne, Anordnungen, in denen alles seinen Platz bekommt. Wer die Geschichte nicht sieht, hört nur Herzlosigkeit.",
+ frage2:"Du sitzt mit am Tisch. Was schlägst du vor?",
+ optionen:[
+  {t:"Eine Kostenaufstellung machen und gemeinsam rechnen.",e:"waende",p:1,f:"Notwendig, aber nicht entscheidend. Dieselbe Tabelle wird von beiden Bauplänen entgegengesetzt gelesen."},
+  {t:"Jeden bitten, den Satz zu Ende zu bringen: &bdquo;Wenn wir das tun, dann sind wir eine Familie, die &hellip;&ldquo;",e:"bauplan",p:2,f:"Der Satz macht den Bauplan sichtbar. Danach streitet man nicht mehr über Herzlosigkeit, sondern über zwei Geschichten &mdash; und das ist verhandelbar."},
+  {t:"Abstimmen, zwei gegen eins.",e:"moebel",p:0,f:"Eine Mehrheit beendet den Abend, nicht den Konflikt. Der Überstimmte behält die Geschichte, in der er recht hatte."},
+  {t:"Grundsätzlich klären, ob Menschen für sich selbst sorgen sollten.",e:"fundament",p:1,f:"Eine echte Fundamentfrage &mdash; nur eine Etage neben dem Konflikt. Sie führt in eine Grundsatzdebatte, während am Tisch eine Entscheidung ansteht."}
+ ],
+ regel:"Menschen leben nicht in Fakten, sondern in Geschichten. Dieselben Zahlen ergeben in zwei Bauplänen zwei Wahrheiten.",
+ quelle:"Kapitel 1 · Vom Baustein zum Gebäude / Ebenen-Check, Frage 4"
+},
+{
+ kat:"Team", titel:"Zwei Angebote",
+ szenario:"Es geht um zwei Ticketsysteme. Funktional nehmen sie sich nichts, der Preis ist fast gleich, die Hälfte des Teams mag das eine, die andere Hälfte das andere. Nach vierzig Minuten sagt jemand: &bdquo;Ich glaube, dahinter steckt ein grundsätzlich anderes Verständnis von Zusammenarbeit.&ldquo; Alle nicken nachdenklich. Die Sitzung dauert weitere fünfzig Minuten.",
+ ebene:"moebel",
+ aufloesung:"Manchmal ist ein Sofa ein Sofa. Zwei gleichwertige Werkzeuge, eine Geschmacksfrage, eine Entscheidung, die man in fünf Minuten treffen und in einem Jahr revidieren kann, ohne dass das Haus wackelt. Der Satz vom &bdquo;grundsätzlich anderen Verständnis&ldquo; klingt tief und kostet fünfzig Minuten. Auch die Vertiefung kann eine Vermeidung sein.",
+ frage2:"Wie kommt ihr aus dieser Sitzung heraus?",
+ optionen:[
+  {t:"Die Entscheidung der Person überlassen, die am meisten damit arbeitet.",e:"moebel",p:2,f:"Angemessen und schnell. Wer im Zimmer wohnt, darf das Sofa wählen."},
+  {t:"Einen Workshop zum Thema Zusammenarbeit ansetzen.",e:"landschaft",p:0,f:"Ein Ebenen-Sprung nach unten: Aus einem Werkzeugstreit wird ein Weltbildseminar. So wird aus einem guten Instrument ein Ritual."},
+  {t:"Jede Seite ihre drei wichtigsten Kriterien nennen lassen und vergleichen.",e:"waende",p:1,f:"Sauber, etwas aufwendig für eine Frage dieser Größe &mdash; aber es schadet nicht."},
+  {t:"Eine Seite wählen und in sechs Monaten überprüfen.",e:"moebel",p:2,f:"Genau richtig. Reversible Entscheidungen verdienen die Energie, die ihrer Tragweite entspricht &mdash; nicht mehr."}
+ ],
+ regel:"Nicht jeder Streit hat ein Fundament. Wer überall Tiefe sucht, findet sie &mdash; und verliert die Zeit, die das wirkliche Fundament gebraucht hätte.",
+ quelle:"Ebenen-Check · Die Gefahr der Ritualisierung"
+},
+{
+ kat:"Persönlich", titel:"Zwölf Jahre",
+ szenario:"Sie ist seit zwölf Jahren in einem Beruf, den sie mit dreiundzwanzig gewählt hat. Seit vier Jahren weiß sie, dass er nicht mehr passt. Sie sagt: &bdquo;Ich kann jetzt nicht mehr wechseln, ich habe zu viel investiert.&ldquo; Dann zählt sie auf, was sie aufgeben müsste. Die Liste ist lang, und jeder Punkt stimmt.",
+ ebene:"waende",
+ aufloesung:"Das ist die Wand-Ebene: Ausbildung, Position, Wissensbestand, Ruf &mdash; alles gebaut, alles tragend, alles echt. Was die Verhaltensökonomie Sunk-Cost-Fallacy nennt, ist hier keine Rechenschwäche, sondern eine Schutzbewegung. Denn wer zugibt, dass die Wände nicht mehr tragen, müsste das Fundament prüfen. Also tapeziert man über die Risse und erklärt sie zu Charakter.",
+ frage2:"Du bist ihre Freundin. Was sagst du?",
+ optionen:[
+  {t:"Ihr vorrechnen, dass versunkene Kosten für die Zukunft irrelevant sind.",e:"waende",p:0,f:"Formal richtig, praktisch wirkungslos. Sie weiß das. Das Argument erreicht die Wand, aber nicht das, was die Wand schützt."},
+  {t:"&bdquo;Was müsstest du über dich glauben, wenn du jetzt gehst?&ldquo;",e:"fundament",p:2,f:"Die Frage geht dorthin, wovor die Wände schützen. Sunk Cost ist selten Mathematik und fast immer Identität."},
+  {t:"Einen konkreten Wechsel recherchieren: Gehälter, Umschulungen, Fristen.",e:"waende",p:1,f:"Nützlich, aber verfrüht. Solange das Fundament ungeprüft bleibt, findet jede Option einen Grund, warum sie nicht geht."},
+  {t:"Ihr raten zu bleiben &mdash; zwölf Jahre sind ein Wert.",e:"waende",p:0,f:"Tapete über dem Riss. Bequem für beide, und in zwei Jahren steht dasselbe Gespräch an."}
+ ],
+ regel:"Wer zugibt, dass die Wände nicht mehr tragen, müsste das Fundament prüfen. Deshalb hält man die Wände.",
+ quelle:"Kapitel 1 · Auf der Wand-Ebene"
+},
+{
+ kat:"Organisation", titel:"Im Rückblick war alles klar",
+ szenario:"Nach dem gescheiterten Produktstart schreibt das Team eine Auswertung. Sie liest sich klar und logisch: der falsche Markt, der zu frühe Termin, der Wechsel in der Leitung. Jede Ursache führt sauber zur nächsten, am Ende wirkt das Scheitern beinahe zwingend. Vorher hatte es niemand im Raum kommen sehen.",
+ ebene:"bauplan",
+ aufloesung:"Aus Ereignissen ist eine Geschichte geworden &mdash; und die Geschichte fühlt sich an wie die Wirklichkeit. Das ist die narrative Verzerrung: Im Rückblick ordnet sich alles zu einem Bogen, den vorher niemand sehen konnte. Der Bauplan, nach dem wir die Räume ordnen, erscheint uns als die einzig mögliche Anordnung. So wird ein Narrativ, das erklären sollte, zur Mauer, die anderes Verstehen verhindert.",
+ frage2:"Was rettet die Auswertung?",
+ optionen:[
+  {t:"Die Liste der Ursachen erweitern.",e:"waende",p:1,f:"Mehr Material im selben Bauplan. Die Liste wird länger, die Geschichte bleibt zwingend."},
+  {t:"Eine zweite Auswertung schreiben, in der dieselben Fakten zu einem anderen Verlauf führen.",e:"bauplan",p:2,f:"Das entzaubert den Bauplan: dieselben Teile, andere Anordnung, andere Geschichte. Ab da ist erkennbar, dass es überhaupt eine Anordnung war."},
+  {t:"Die Verantwortlichen benennen.",e:"moebel",p:0,f:"Möbelrücken mit Namensschildern. Es beendet die Unsicherheit, nicht das Missverständnis."},
+  {t:"Festhalten, was vor dem Start tatsächlich gewusst wurde &mdash; ohne das Ergebnis zu kennen.",e:"waende",p:2,f:"Sehr gut. Das trennt Wissen von Rückschau und nimmt der Geschichte ihre Zwangsläufigkeit."}
+ ],
+ regel:"Wir halten unsere Geschichte über das Geschehen für das Geschehen selbst.",
+ quelle:"Kapitel 1 · Auf der Bauplan-Ebene: die narrative Falle"
+},
+{
+ kat:"Öffentlichkeit", titel:"Last oder Beitrag",
+ szenario:"In einer Talkshow spricht der eine Gast durchgehend von &bdquo;Steuerlast&ldquo;, die andere ebenso konsequent von &bdquo;Solidarbeitrag&ldquo;. Sie reden über dieselbe Abgabe, dieselbe Höhe, dieselben Zahlen. Nach dreißig Minuten hat sich niemand bewegt, und beide wirken, als hätten sie gewonnen.",
+ ebene:"fundament",
+ aufloesung:"Ein Frame ist kein Wortspiel an der Oberfläche. Er wirkt, weil er Prämissen aktiviert, die längst da liegen: &bdquo;Last&ldquo; ruft auf, dass Steuern eine Bürde seien, &bdquo;Beitrag&ldquo;, dass eine Gemeinschaft etwas zu tragen habe. Die Worte legen sich nicht über das Fundament &mdash; sie greifen hinein und holen heraus, was dort schon liegt. Deshalb sind Frames so schwer zu kontern: Wer den Frame negiert, aktiviert ihn.",
+ frage2:"Du moderierst. Was tust du?",
+ optionen:[
+  {t:"Den Frame zurückweisen: &bdquo;Das ist keine Last.&ldquo;",e:"moebel",p:0,f:"Die Verneinung ruft das Wort auf. Wer &bdquo;keine Last&ldquo; sagt, hat Last gesagt."},
+  {t:"Bei den Zahlen bleiben und sachlich rechnen.",e:"waende",p:1,f:"Sauber und wirkungslos. Dieselben Zahlen werden von beiden Fundamenten entgegengesetzt gelesen."},
+  {t:"Laut fragen, welche Annahme in beiden Wörtern steckt &mdash; und ob die Gäste sie teilen.",e:"fundament",p:2,f:"Damit wird der Frame als Frame sichtbar. Nur wer aufs Fundament schaut, erkennt, woran der Hebel ansetzt."},
+  {t:"Einen eigenen, stärkeren Begriff prägen.",e:"bauplan",p:1,f:"Wirksam, aber es bleibt Werkzeugstreit. Man tauscht den Hebel, ohne das Material anzusehen, an dem er ansetzt."}
+ ],
+ regel:"Framing, Nudging und Narrativ sind Werkzeuge. Prämissen sind das Material, an dem diese Werkzeuge ansetzen.",
+ quelle:"Kapitel 1 · Framing, Nudging, Narrative"
+},
+{
+ kat:"Familie", titel:"Sicherheit",
+ szenario:"Der Vater versteht nicht, warum die Tochter die feste Stelle ausschlägt. Die Tochter versteht nicht, warum der Vater eine Firma für verlässlicher hält als die eigenen Fähigkeiten. Beide haben Gründe: Er hat in vierzig Jahren gesehen, was Verlässlichkeit wert ist. Sie hat gesehen, wie verlässlich Institutionen sind, wenn es eng wird.",
+ ebene:"landschaft",
+ aufloesung:"Beide streiten über eine Entscheidung und stehen dabei in verschiedenen Landschaften. Die eine war jahrzehntelang mild: Wer sich einrichtete, war versorgt. In der anderen sind Stürme normal. Der Normalitätsbias &mdash; die Annahme, die Zukunft sehe aus wie die Vergangenheit &mdash; ist keine Dummheit, sondern die Landschaft, in der jemand gebaut hat.",
+ frage2:"Was führt aus dem Missverständnis?",
+ optionen:[
+  {t:"Ihm Zahlen zur Entwicklung von Festanstellungen zeigen.",e:"waende",p:1,f:"Wände gegen Landschaft. Die Zahlen stimmen und verändern nichts, weil sie in seiner Landschaft keine Bedeutung haben."},
+  {t:"Ihn fragen, was Sicherheit in seinem Leben bedeutet hat &mdash; und ihm dann erzählen, was sie in ihrem bedeutet.",e:"landschaft",p:2,f:"Zwei Landschaften werden nebeneinander sichtbar. Das ist keine Einigung, es ist Verständigung &mdash; und mehr ist auf dieser Ebene selten zu haben."},
+  {t:"Ihm recht geben, um den Abend zu retten.",e:"moebel",p:0,f:"Der Abend ist gerettet, das Missverständnis bleibt. Das nächste Gespräch beginnt an derselben Stelle."},
+  {t:"Über die konkrete Stelle sprechen: Gehalt, Vertrag, Perspektive.",e:"moebel",p:1,f:"Möbel. Ein sinnvolles Gespräch &mdash; nur nicht das, das hier geführt wird."}
+ ],
+ regel:"Zwei Generationen streiten über Werte und stehen in unterschiedlichen Landschaften. Beide haben recht &mdash; auf ihrer Ebene.",
+ quelle:"Kapitel 1 · Auf der Landschafts-Ebene / Kapitel 12"
+}
+];
+
+const MAX=FAELLE.length*4;
+const bandsEl=document.getElementById("bands");
+const caseEl=document.getElementById("case");
+const stateEl=document.getElementById("schnittState");
+const noteEl=document.getElementById("schnittNote");
+
+let S={i:0,punkte:0,phase:"intro",dx:null,akt:null,log:[]};
+
+/* ---- Schnitt ---- */
+bandsEl.innerHTML=EBENEN.map(e=>
+ '<button class="band" type="button" data-id="'+e.id+'" disabled>'+
+ '<span class="code">'+e.code+'</span>'+
+ '<span><span class="bname">'+e.name+'</span><span class="bterm">'+e.term+'</span></span>'+
+ '<span class="mk"></span></button>').join("");
+const bandEls={};
+EBENEN.forEach(e=>{bandEls[e.id]=bandsEl.querySelector('[data-id="'+e.id+'"]')});
+bandsEl.addEventListener("click",ev=>{
+ const b=ev.target.closest(".band"); if(!b||b.disabled) return; waehleEbene(b.dataset.id);
+});
+
+function schnittLive(live){
+ bandsEl.classList.toggle("is-live",live);
+ EBENEN.forEach(e=>{const b=bandEls[e.id];b.disabled=!live;b.className="band";b.querySelector(".mk").textContent="";});
+}
+function schnittMarkieren(gewaehlt,richtig){
+ EBENEN.forEach(e=>{
+  const b=bandEls[e.id]; b.disabled=true; b.className="band";
+  const mk=b.querySelector(".mk");
+  if(e.id===richtig){b.classList.add("correct");mk.textContent="✓";}
+  else if(e.id===gewaehlt){b.classList.add("wrong");mk.textContent="✕";}
+  else b.classList.add("dim");
+ });
+ bandsEl.classList.remove("is-live");
+}
+
+/* ---- Bildschirme ---- */
+function intro(){
+ S={i:0,punkte:0,phase:"intro",dx:null,akt:null,log:[]};
+ schnittLive(false); stateEl.textContent="Fünf Ebenen";
+ noteEl.textContent="Der Bauplan ist gestrichelt gezeichnet: Er liegt nicht tiefer als das Fundament, sondern quer zu allem.";
+ caseEl.innerHTML=
+ '<div class="intro">'+
+ '<h2>Zwei Menschen streiten über Möbel, während ihr Konflikt im Fundament liegt.</h2>'+
+ '<p class="lead">Die meisten Auseinandersetzungen laufen nicht ins Leere, weil jemand falsch liegt, sondern weil auf der falschen Etage verhandelt wird. Das Buch nennt das den Ebenen-Sprung. Er ist nicht selten &mdash; er ist die Regel.</p>'+
+ '<p>Du bekommst zehn Fälle aus Büros, Wohnzimmern und Talkshows. Zu jedem entscheidest du zweimal.</p>'+
+ '<ol class="schritte">'+
+ '<li><div><b>Diagnose</b><span>Auf welcher Ebene liegt der Konflikt wirklich? Du antwortest, indem du links in die Etage klickst.</span></div></li>'+
+ '<li><div><b>Handlung</b><span>Was tust du? Jede Option setzt auf einer Ebene an &mdash; nur eine trifft die richtige.</span></div></li>'+
+ '<li><div><b>Auswertung</b><span>Am Ende siehst du, wohin du systematisch greifst: zu weit oben, zu tief, oder genau hin.</span></div></li>'+
+ '</ol>'+
+ '<div class="actions"><button class="btn" type="button" id="go">Ersten Fall öffnen</button>'+
+ '<span style="font-family:var(--mono);font-size:11.5px;color:var(--ink-3)">10 Fälle · ca. 12 Minuten</span></div>'+
+ '</div>';
+ document.getElementById("go").onclick=()=>{S.phase="dx";render();};
+}
+
+function render(){
+ if(S.phase==="intro"){intro();return;}
+ if(S.phase==="ende"){ende();return;}
+ const f=FAELLE[S.i];
+ const nr=String(S.i+1).padStart(2,"0");
+ let h='<div class="casebar"><span>Fall '+nr+' / '+FAELLE.length+'</span><span class="pts">'+S.punkte+' von '+MAX+' Punkten</span></div>'+
+  '<span class="kat">'+f.kat+'</span>'+
+  '<h2>'+f.titel+'</h2>'+
+  '<p class="szenario">'+f.szenario+'</p>';
+
+ if(S.phase==="dx"){
+  schnittLive(true);
+  stateEl.textContent="Wähle eine Etage";
+  noteEl.textContent="Klicke in die Ebene, auf der der Konflikt deiner Meinung nach wirklich liegt.";
+  h+='<div class="frage"><p class="frage-t">Frage 1 · Diagnose</p>'+
+     '<p class="frage-q">Auf welcher Ebene liegt dieser Konflikt wirklich?</p>'+
+     '<p class="hinweis">Antworte im Schnitt &mdash; Möbel, Wände, Fundament, Bauplan oder Landschaft.</p></div>';
+  caseEl.innerHTML=h; caseEl.classList.remove("gelesen"); window.scrollTo({top:0,behavior:"smooth"}); return;
+ }
+
+ /* Diagnose ist gefallen */
+ const richtig=S.dx===f.ebene;
+ const eName=id=>EBENEN.find(e=>e.id===id).name;
+ h+='<div class="frage"><p class="frage-t">Frage 1 · Diagnose</p>'+
+    '<p class="frage-q">Auf welcher Ebene liegt dieser Konflikt wirklich?</p>'+
+    '<div class="fb" style="border-top:none;padding-top:4px">'+
+    (richtig
+      ? '<span class="tag t-ok">Getroffen</span>'+eName(f.ebene)+'. '
+      : '<span class="tag t-miss">Daneben</span>Du hast '+eName(S.dx)+' gewählt. Der Konflikt liegt auf der Ebene '+eName(f.ebene)+'. ')+
+    '</div></div>'+
+  '<div class="aufloesung"><p class="t">Was hier wirklich passiert</p><p>'+f.aufloesung+'</p></div>';
+
+ h+='<div class="frage"><p class="frage-t">Frage 2 · Handlung</p><p class="frage-q">'+f.frage2+'</p><div class="opts" id="opts">';
+ f.optionen.forEach((o,k)=>{
+  const ltr=["A","B","C","D"][k];
+  let cls="opt", fb="";
+  if(S.phase==="fertig"){
+   const best=o.p===2, gewaehlt=k===S.akt;
+   cls+=best?" best":(gewaehlt?" miss":"");
+   if(!best&&!gewaehlt) cls+=" faded";
+   if(gewaehlt||best){
+    const tag=o.p===2?'<span class="tag t-ok">Trifft</span>':(o.p===1?'<span class="tag t-mid">Halb</span>':'<span class="tag t-miss">Ebenen-Sprung</span>');
+    fb='<p class="fb">'+tag+o.f+'</p>';
+   }
+  }
+  h+='<button class="'+cls+'" type="button" data-k="'+k+'"'+(S.phase==="fertig"?" disabled":"")+'>'+
+     '<span class="ltr">'+ltr+'</span><span>'+o.t+fb+'</span></button>';
+ });
+ h+='</div></div>';
+
+ if(S.phase==="fertig"){
+  h+='<div class="regel"><p class="t">Die unsichtbare Spielregel</p><p>'+f.regel+'</p>'+
+     '<p class="quelle">'+f.quelle+'</p></div>'+
+     '<div class="actions"><button class="btn" type="button" id="next">'+
+     (S.i===FAELLE.length-1?"Auswertung ansehen":"Nächster Fall")+'</button></div>';
+ }
+ caseEl.innerHTML=h; caseEl.classList.add("gelesen");
+ if(S.phase==="akt"){
+  document.getElementById("opts").addEventListener("click",ev=>{
+   const b=ev.target.closest(".opt"); if(!b) return; waehleHandlung(+b.dataset.k);
+  });
+ }else{
+  document.getElementById("next").onclick=()=>{
+   if(S.i===FAELLE.length-1){S.phase="ende";}
+   else{S.i++;S.phase="dx";S.dx=null;S.akt=null;}
+   render();
+  };
+ }
+}
+
+function waehleEbene(id){
+ const f=FAELLE[S.i];
+ S.dx=id; S.phase="akt";
+ if(id===f.ebene) S.punkte+=2;
+ schnittMarkieren(id,f.ebene);
+ stateEl.textContent=(id===f.ebene?"Getroffen":"Daneben");
+ noteEl.textContent="Rot markiert die gewählte Etage, grün die, auf der der Konflikt liegt.";
+ render(); speichern();
+}
+
+function waehleHandlung(k){
+ const f=FAELLE[S.i];
+ S.akt=k; S.punkte+=f.optionen[k].p; S.phase="fertig";
+ S.log.push({ebene:f.ebene,dx:S.dx,dxOk:S.dx===f.ebene,p:f.optionen[k].p,aktEbene:f.optionen[k].e});
+ render(); speichern();
+}
+
+/* ---- Auswertung ---- */
+function ende(){
+ schnittLive(false);
+ EBENEN.forEach(e=>{bandEls[e.id].className="band";bandEls[e.id].querySelector(".mk").textContent="";});
+ stateEl.textContent="Deine Karte";
+ noteEl.textContent="Die Ebenen bleiben. Was sich ändert, ist, auf welcher du zuerst nachsiehst.";
+
+ const treffer=S.log.filter(l=>l.dxOk).length;
+ const spruenge=S.log.filter(l=>l.p===0).length;
+ const daneben=S.log.filter(l=>!l.dxOk);
+ let delta=0; daneben.forEach(l=>{delta+=TIEFE[l.dx]-TIEFE[l.ebene];});
+ const schnitt=daneben.length?delta/daneben.length:0;
+
+ let titel,deutung;
+ if(S.punkte>=34){titel="Architekturbewusstsein";}
+ else if(S.punkte>=25){titel="Du siehst das Haus";}
+ else if(S.punkte>=15){titel="Zwischen den Etagen";}
+ else{titel="Willkommen im Möbelstreit";}
+
+ if(daneben.length===0){
+  deutung="Zehn von zehn Diagnosen richtig. Das Werkzeug sitzt. Die schwerere Übung beginnt dort, wo du selbst im Raum stehst: Welche Ebene deines eigenen Hauses prüfst du gerade nicht?";
+ }else if(schnitt<=-0.5){
+  deutung="Deine Fehldiagnosen liegen fast alle weiter oben als der Konflikt. Du suchst das Problem dort, wo es sichtbar ist &mdash; bei Maßnahmen, Zahlen, Formulierungen. Das ist die häufigste Richtung des Ebenen-Sprungs und der Grund, warum gute Kompromisse scheitern.";
+ }else if(schnitt>=0.5){
+  deutung="Deine Fehldiagnosen liegen weiter unten als der Konflikt. Du vermutest Fundament und Weltbild, wo Möbel und Wände gemeint sind. Das Werkzeug ist scharf, aber wer überall Tiefe sucht, verwandelt den Ebenen-Check selbst in ein Ritual.";
+ }else{
+  deutung="Deine Fehldiagnosen gehen in beide Richtungen &mdash; mal zu flach, mal zu tief. Keine feste Schlagseite, aber auch noch kein sicherer Blick für die Etage.";
+ }
+ if(spruenge>0) deutung+=" Bei "+spruenge+" von "+FAELLE.length+" Fällen hat deine Handlung auf einer Ebene angesetzt, auf der das Problem nicht lag.";
+
+ const proEbene=EBENEN.map(e=>{
+  const alle=S.log.filter(l=>l.ebene===e.id);
+  const ok=alle.filter(l=>l.dxOk).length;
+  return {e:e,ok:ok,n:alle.length};
+ });
+
+ caseEl.innerHTML=
+ '<div class="casebar"><span>Auswertung</span><span class="pts">'+FAELLE.length+' Fälle</span></div>'+
+ '<div class="ergebnis">'+
+  '<p class="zahl">'+S.punkte+'<small>von '+MAX+'</small></p>'+
+  '<h2 class="titel">'+titel+'</h2>'+
+  '<p class="deutung">'+deutung+'</p>'+
+  '<div class="bilanz">'+proEbene.map(r=>
+    '<div class="row"><span class="c">'+r.e.code+'</span>'+
+    '<span class="n">'+r.e.name+'<em>'+r.e.term+'</em></span>'+
+    '<span class="meter"><i style="width:'+(r.n?Math.round(r.ok/r.n*100):0)+'%"></i></span>'+
+    '<span class="v">'+r.ok+'/'+r.n+'</span></div>').join("")+
+  '</div>'+
+  '<p class="hinweis" style="margin-top:10px">Erkannte Diagnosen je Ebene &mdash; '+treffer+' von '+FAELLE.length+' insgesamt.</p>'+
+  '<div class="weiter"><h3>Die drei Fragen, die in fast jeder Auseinandersetzung helfen</h3>'+
+   '<ul>'+
+   '<li class="q">Auf welcher Ebene streite ich gerade?</li>'+
+   '<li class="q">Auf welcher Ebene spricht mein Gegenüber?</li>'+
+   '<li class="q">Welche Ebene meines eigenen Hauses prüfe ich gerade nicht?</li>'+
+   '</ul>'+
+   '<p style="margin-top:14px;font-size:14.5px;color:var(--ink-2)">Die dritte ist die schwerste. Die entscheidende Frage lautet nicht: Wer hat recht? Sondern: Von welchem Haus aus sprechen wir?</p>'+
+  '</div>'+
+  '<div class="actions"><button class="btn" type="button" id="again">Noch einmal spielen</button></div>'+
+ '</div>';
+ document.getElementById("again").onclick=()=>{intro();speichern();};
+ window.scrollTo({top:0,behavior:"smooth"});
+ speichern();
+}
+
+/* ---- Zustand über Neuveröffentlichungen retten ---- */
+function speichern(){ try{ window.claude?.hot?.snapshot?.(S); }catch(e){} }
+function start(data){
+ if(data&&data.log&&typeof data.i==="number"&&data.phase&&data.phase!=="intro"){
+  S=data;
+  if(S.phase==="dx"){render();}
+  else if(S.phase==="ende"){ende();}
+  else{schnittMarkieren(S.dx,FAELLE[S.i].ebene);render();}
+ }else{ intro(); }
+}
+try{
+ if(window.claude?.hot?.ready) window.claude.hot.ready(start);
+ else start(window.claude?.hot?.data ?? {});
+}catch(e){ intro(); }
+</script>
