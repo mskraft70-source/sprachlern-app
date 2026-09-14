@@ -41,17 +41,15 @@
   p{margin:0}
   button{font:inherit;color:inherit}
 
-  /* ---------- Kopf ---------- */
   .masthead{border-bottom:1px solid var(--line);padding-bottom:22px;margin-bottom:28px}
   .eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin-bottom:12px}
   .masthead h1{font-size:clamp(34px,6vw,54px);letter-spacing:-.015em}
   .masthead .sub{font-family:var(--display);font-style:italic;font-size:clamp(16px,2.4vw,19px);color:var(--ink-2);margin-top:8px;max-width:58ch}
 
-  /* ---------- Bühne ---------- */
   .stage{display:grid;grid-template-columns:1fr;gap:26px;align-items:start}
   @media (min-width:920px){ .stage{grid-template-columns:300px minmax(0,1fr);gap:40px} .schnitt{position:sticky;top:20px} }
+  .schnitt[hidden]{display:none}
 
-  /* ---------- Schnitt ---------- */
   .schnitt-head{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:10px}
   .schnitt-head .t{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3)}
   .bands{display:flex;flex-direction:column;gap:3px}
@@ -62,10 +60,8 @@
   .band .bname{font-family:var(--display);font-size:17px;font-weight:600;display:block;line-height:1.25}
   .band .bterm{font-size:12.5px;color:var(--ink-2);display:block}
   .band .mk{font-family:var(--mono);font-size:15px;text-align:center;color:transparent}
-  .band[data-id="waende"]{background:
-    repeating-linear-gradient(45deg,transparent 0 6px,var(--hatch) 6px 7px),var(--b2)}
-  .band[data-id="fundament"]{background:
-    radial-gradient(var(--dot) .9px,transparent .9px) 0 0/7px 7px,var(--b3)}
+  .band[data-id="waende"]{background:repeating-linear-gradient(45deg,transparent 0 6px,var(--hatch) 6px 7px),var(--b2)}
+  .band[data-id="fundament"]{background:radial-gradient(var(--dot) .9px,transparent .9px) 0 0/7px 7px,var(--b3)}
   .band[data-id="bauplan"]{background:
     repeating-linear-gradient(0deg,transparent 0 9px,var(--hatch) 9px 10px),
     repeating-linear-gradient(90deg,transparent 0 9px,var(--hatch) 9px 10px),var(--b4);
@@ -74,7 +70,6 @@
   .is-live .band{cursor:pointer}
   .is-live .band:hover,.is-live .band:focus-visible{border-color:var(--ink);transform:translateX(4px)}
   .band:focus-visible{outline:2px solid var(--mark);outline-offset:2px}
-  .band.picked{border-color:var(--ink);box-shadow:inset 3px 0 0 var(--ink)}
   .band.correct{border-color:var(--ok);box-shadow:inset 3px 0 0 var(--ok)}
   .band.correct .mk{color:var(--ok)}
   .band.wrong{border-color:var(--mark);border-style:dashed;box-shadow:inset 3px 0 0 var(--mark)}
@@ -82,7 +77,20 @@
   .band.dim{opacity:.5}
   .schnitt-note{font-size:12.5px;color:var(--ink-3);margin-top:12px;border-top:1px solid var(--line);padding-top:10px}
 
-  /* ---------- Fall ---------- */
+  /* Register (Modus 2) */
+  .regliste{display:flex;flex-direction:column;border-top:1px solid var(--line)}
+  .reg{display:grid;grid-template-columns:32px 1fr;gap:10px;align-items:baseline;padding:9px 0 8px;border-bottom:1px dotted var(--line)}
+  .reg .code{font-family:var(--mono);font-size:10.5px;color:var(--ink-3)}
+  .reg .rname{font-family:var(--display);font-size:14.5px;line-height:1.3;color:var(--ink-3)}
+  .reg .rfam{display:block;font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);margin-top:2px}
+  .reg.leer .rname{color:var(--line-strong);letter-spacing:.3em}
+  .reg.voll{border-bottom-style:solid}
+  .reg.voll .rname{color:var(--ink);font-weight:600}
+  .reg.voll .rfam{color:var(--ink-2)}
+  .reg.jetzt{box-shadow:inset 3px 0 0 var(--mark);padding-left:8px;margin-left:-8px}
+  .reg.verfehlt .rname{color:var(--ink-2)}
+  .reg.verfehlt .code{color:var(--mark)}
+
   .case{min-width:0}
   .casebar{display:flex;align-items:center;justify-content:space-between;gap:14px;font-family:var(--mono);font-size:11.5px;
     letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);border-bottom:1px solid var(--line);padding-bottom:9px;margin-bottom:18px}
@@ -92,6 +100,13 @@
   .case h2{font-size:clamp(25px,4vw,33px);letter-spacing:-.01em}
   .szenario{font-family:var(--display);font-size:clamp(17px,2.3vw,18.5px);line-height:1.68;color:var(--ink);margin-top:14px;max-width:64ch}
   .gelesen .szenario{color:var(--ink-2)}
+
+  /* Der Satz (Modus 2) */
+  .satzkarte{border:1px solid var(--line-strong);background:var(--surface-2);border-radius:2px;padding:26px 28px;margin-top:14px;position:relative}
+  .satzkarte .t{font-family:var(--mono);font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--ink-3);margin-bottom:12px}
+  .satzkarte q{font-family:var(--display);font-size:clamp(22px,3.6vw,30px);line-height:1.38;quotes:"\201E" "\201C";display:block;max-width:32ch;text-wrap:balance}
+  .satzkarte .woher{font-size:13.5px;color:var(--ink-2);margin-top:14px;padding-top:12px;border-top:1px solid var(--line);max-width:58ch}
+  @media (max-width:520px){ .satzkarte{padding:20px} }
 
   .frage{margin-top:30px}
   .frage-t{font-family:var(--mono);font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:var(--ink-3);margin-bottom:7px}
@@ -106,7 +121,6 @@
   .opt:hover{border-color:var(--ink);background:var(--surface-2)}
   .opt:focus-visible{outline:2px solid var(--mark);outline-offset:2px}
   .opt[disabled]{cursor:default}
-  .opt.chosen{border-color:var(--ink);background:var(--surface-2)}
   .opt.best{border-color:var(--ok);box-shadow:inset 3px 0 0 var(--ok)}
   .opt.miss{border-color:var(--mark);border-style:dashed}
   .opt.faded{opacity:.66}
@@ -118,6 +132,9 @@
     border-radius:2px;padding:18px 20px}
   .aufloesung .t{font-family:var(--mono);font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--ink-3);margin-bottom:8px}
   .aufloesung p{font-size:15.5px;line-height:1.65;max-width:62ch}
+  .aufloesung .name{font-family:var(--display);font-size:19px;font-weight:600;margin-bottom:8px;max-width:40ch}
+  .aufloesung .wo{margin-top:12px;padding-top:11px;border-top:1px solid var(--line);font-size:14.5px;color:var(--ink-2);max-width:62ch}
+  .aufloesung .wo b{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--mark);font-weight:400;margin-right:8px}
 
   .regel{margin-top:26px;border-top:1px solid var(--line-strong);border-bottom:1px solid var(--line-strong);padding-block:20px}
   .regel .t{font-family:var(--mono);font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--mark);margin-bottom:9px}
@@ -131,9 +148,19 @@
   .btn:focus-visible{outline:2px solid var(--mark);outline-offset:2px}
   .btn.ghost{background:transparent;color:var(--ink);border-color:var(--line-strong)}
 
-  /* ---------- Intro / Auswertung ---------- */
   .intro p{font-size:16.5px;color:var(--ink-2);max-width:62ch;margin-top:14px}
   .intro .lead{font-family:var(--display);font-size:clamp(18px,2.6vw,21px);color:var(--ink);line-height:1.6}
+  .modi{display:grid;grid-template-columns:1fr;gap:14px;margin-top:28px}
+  @media (min-width:640px){ .modi{grid-template-columns:1fr 1fr} }
+  .modus{display:flex;flex-direction:column;align-items:flex-start;gap:8px;text-align:left;background:var(--surface);
+    border:1px solid var(--line);border-radius:2px;padding:20px;cursor:pointer;transition:border-color .16s ease,background .16s ease}
+  .modus:hover{border-color:var(--ink);background:var(--surface-2)}
+  .modus:focus-visible{outline:2px solid var(--mark);outline-offset:2px}
+  .modus .mn{font-family:var(--mono);font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--ink-3)}
+  .modus h3{font-size:21px}
+  .modus .md{font-size:14.5px;color:var(--ink-2)}
+  .modus .mf{font-family:var(--mono);font-size:11px;color:var(--ink-3);margin-top:auto;padding-top:8px}
+
   .schritte{list-style:none;padding:0;margin:24px 0 0;display:flex;flex-direction:column;gap:2px;counter-reset:s}
   .schritte li{display:grid;grid-template-columns:32px 1fr;gap:14px;padding:13px 0;border-top:1px solid var(--line);align-items:baseline}
   .schritte li:last-child{border-bottom:1px solid var(--line)}
@@ -167,23 +194,18 @@
   <header class="masthead">
     <p class="eyebrow">Marc Steffen Kraft &middot; Die unsichtbaren Spielregeln</p>
     <h1>Der Ebenen-Check</h1>
-    <p class="sub">Zehn Konflikte. Die Frage ist nie, wer recht hat &mdash; sondern auf welcher Etage gestritten wird.</p>
+    <p class="sub" id="subline">Zwei Übungen zum Buch. Die Frage ist nie, wer recht hat &mdash; sondern worauf gestritten wird.</p>
   </header>
 
   <main class="stage">
-    <aside class="schnitt">
-      <div class="schnitt-head"><span class="t">Der Schnitt</span><span class="t" id="schnittState">Fünf Ebenen</span></div>
-      <div class="bands" id="bands"></div>
-      <p class="schnitt-note" id="schnittNote">Der Bauplan ist gestrichelt gezeichnet: Er liegt nicht tiefer als das Fundament, sondern quer zu allem.</p>
-    </aside>
+    <aside class="schnitt" id="seitenleiste" hidden></aside>
     <section class="case" id="case"></section>
   </main>
 
   <footer>
-    Die Fälle sind für dieses Spiel geschrieben. Die Haus-Metapher, die fünf Ebenen, der Ebenen-Sprung und die sechs Fragen des Ebenen-Checks stammen aus dem Buch &bdquo;Die unsichtbaren Spielregeln &ndash; Wie Weltbilder entstehen, uns prägen und Konflikte schaffen&ldquo;.
+    Die Fälle und Sätze sind für dieses Spiel geschrieben. Die Haus-Metapher, die fünf Ebenen, der Ebenen-Sprung und die Prämissen aus Teil&nbsp;III stammen aus dem Buch &bdquo;Die unsichtbaren Spielregeln &ndash; Wie Weltbilder entstehen, uns prägen und Konflikte schaffen&ldquo;.
   </footer>
 </div>
-
 <script>
 const EBENEN=[
  {id:"moebel",code:"E1",name:"Möbel",term:"Meinungen"},
@@ -347,225 +369,655 @@ const FAELLE=[
 }
 ];
 
-const MAX=FAELLE.length*4;
-const bandsEl=document.getElementById("bands");
+
+/* ---------- Modus 2: Sätze aus Teil III ---------- */
+const SAETZE=[
+{
+ satz:"Sei du selbst. Hör auf dein Herz.",
+ woher:"Steht in Werbespots, in Ratgebern, in Abiturreden. Kaum jemand würde widersprechen.",
+ kurz:"Das Individuum ist die Grundeinheit", familie:"Westlich-modern",
+ optionen:[
+  {t:"Jeder Mensch trägt eine eigene, innere Wahrheit in sich, die es zu finden und auszudrücken gilt.",r:true,
+   f:"Taylor nennt das den expressiven Individualismus. Der Satz ist kein Ratschlag, sondern eine Erkenntnistheorie: Das Innere ist die Quelle, an der man sich ausrichtet."},
+  {t:"Menschen sind im Kern gut.",r:false,
+   f:"Schwingt oft mit, wird aber nicht gebraucht. Der Satz funktioniert auch für jemanden, der Menschen für gefährlich hält &mdash; er verlangt nur, dass das eigene Innere maßgeblich ist."},
+  {t:"Gefühle sind zuverlässiger als der Verstand.",r:false,
+   f:"Nah dran und doch zu eng. Vorausgesetzt wird nicht die Überlegenheit des Gefühls, sondern die Existenz eines eigenen, gültigen Inneren."},
+  {t:"Jeder ist für sein Leben selbst verantwortlich.",r:false,
+   f:"Das ist die Machbarkeitsprämisse &mdash; eine Nachbarin, nicht diese. &bdquo;Sei du selbst&ldquo; sagt nichts über Verantwortung, sondern über die Quelle der Orientierung."}
+ ],
+ aufloesung:"Ein Kind mit eigenem Zimmer, abschließbarer Tür, selbst gewählten Postern kommt gar nicht umhin, sich als Individuum zu begreifen, das sich durch innere Werte auszeichnet. Das Zimmer lehrt eine Weltanschauung, ohne ein Wort zu sagen. Architektur als Prämisse.",
+ wo:"Der mittelalterliche Adelssohn hatte nie ein eigenes Zimmer und war stets sichtbar. Er kam ebenso zwangsläufig zum Gegenteil: dass sein Wert nicht innen liegt, sondern in dem, was andere über ihn denken. Beide hatten recht &mdash; beide lebten in ihrer Prämisse.",
+ gegen:[
+  {t:"Finde heraus, was wirklich zu dir passt.",r:false,f:"Dieselbe Annahme, freundlicher formuliert."},
+  {t:"Man kennt dich an deiner Familie.",r:true,f:"Hier kommt der Wert von außen, aus der Zugehörigkeit. In den meisten Gesellschaften der Menschheitsgeschichte war das die Selbstverständlichkeit &mdash; nicht unsere."},
+  {t:"Lass dir nicht vorschreiben, was du zu glauben hast.",r:false,f:"Dieselbe Annahme, in Abwehrform."},
+  {t:"Das Kind sucht sich seine Kleidung selbst aus.",r:false,f:"Dieselbe Annahme, als Erziehungspraxis. Prämissen werden nicht nur gesagt, sie werden eingerichtet."}
+ ],
+ regel:"Das westliche Weltbild hat die Prämisse umgekehrt &mdash; und vergessen, dass es das getan hat.",
+ quelle:"Kapitel 9 · Prämisse 1: Das Individuum ist die Grundeinheit"
+},
+{
+ satz:"Die Wirtschaft ist nur um 0,2 Prozent gewachsen — ein schwaches Quartal.",
+ woher:"Nachrichtensprache. Niemand fragt nach, was an 0,2 Prozent schwach sein soll.",
+ kurz:"Wachstum ist gut", familie:"Westlich-modern",
+ optionen:[
+  {t:"Mehr ist besser: Wachstum steht stellvertretend für Wohlstand, Gerechtigkeit und Glück.",r:true,
+   f:"Genau. Und weil Wachstum als Prämisse operiert und nicht als Hypothese, wird die Frage, ob es wirklich Glück oder Gerechtigkeit bringt, gar nicht erst gestellt."},
+  {t:"Die Wirtschaft ist berechenbar.",r:false,
+   f:"Der Satz braucht keine Berechenbarkeit. Er braucht eine Richtung, in die es gehen soll."},
+  {t:"Der Staat ist für die Wirtschaft verantwortlich.",r:false,
+   f:"Eine politische Zuschreibung, die der Satz nicht benötigt. Er wertet, er verteilt keine Zuständigkeit."},
+  {t:"Menschen handeln rational.",r:false,
+   f:"Der Homo oeconomicus ist eine andere Annahme. Dieser Satz erklärt nichts &mdash; er bewertet."}
+ ],
+ aufloesung:"Die Wertung sitzt schon in den Vokabeln. Eine Wirtschaft, die nicht wächst, ist &bdquo;stagnierend&ldquo; oder &bdquo;in der Krise&ldquo;. Eine, die wächst, ist &bdquo;gesund&ldquo;. Man muss nicht mehr argumentieren; die Prämisse spricht für sich.",
+ wo:"Der Kapitalismus begann als ökonomische Theorie. Harari beschreibt, wie er zur Religion wurde &mdash; mit eigenen Glaubenssätzen, Priestern und Tempeln. Der wichtigste Glaubenssatz ist dieser hier.",
+ gegen:[
+  {t:"Das Unternehmen ist gesund, es expandiert.",r:false,f:"Dieselbe Annahme, im Wort &bdquo;gesund&ldquo; versteckt."},
+  {t:"Der Verein hat seit fünf Jahren dieselbe Mitgliederzahl — er stagniert.",r:false,f:"Dieselbe Annahme. &bdquo;Stagnieren&ldquo; ist keine Beschreibung, es ist ein Urteil."},
+  {t:"Der Wald steht seit dreihundert Jahren in derselben Größe.",r:true,f:"Hier ist Gleichbleiben kein Mangel, sondern ein Zustand. Es fehlt die Wertung, und plötzlich sieht man, dass sie sonst immer mitläuft."},
+  {t:"Unsere Reichweite ist eingebrochen, wir müssen gegensteuern.",r:false,f:"Dieselbe Annahme, auf ein anderes Feld übertragen."}
+ ],
+ regel:"Was als Hypothese gälte, müsste sich prüfen lassen. Als Prämisse muss es das nicht.",
+ quelle:"Kapitel 9 · Prämisse 3: Wachstum ist gut"
+},
+{
+ satz:"Wer sich anstrengt, schafft es auch.",
+ woher:"Gesagt mit den besten Absichten — meistens zu jemandem, der sich anstrengt.",
+ kurz:"Das Leben ist machbar", familie:"Westlich-modern",
+ optionen:[
+  {t:"Das Leben ist ein Projekt, für dessen Verlauf der Einzelne verantwortlich ist.",r:true,
+   f:"Die Prämisse der Machbarkeit. Sie befähigt &mdash; und sie beschuldigt. Beides steckt im selben Satz."},
+  {t:"Menschen sind von Natur aus fleißig.",r:false,
+   f:"Eine Annahme über Motivation. Der Satz braucht sie nicht; er braucht die Annahme über die Ursache des Ergebnisses."},
+  {t:"Die Chancen sind gleich verteilt.",r:false,
+   f:"Nah dran &mdash; aber das wäre eine empirische Behauptung, die man prüfen könnte. Die Prämisse liegt darunter und wird nie geprüft: dass das Ergebnis am Einzelnen hängt."},
+  {t:"Arbeit macht glücklich.",r:false,
+   f:"Ein Wert, keine Voraussetzung. Der Satz gilt auch für jemanden, der Arbeit für eine Last hält."}
+ ],
+ aufloesung:"Wer arm ist, hat falsch entschieden. Wer krank ist, hat nicht auf sich geachtet. Wer unglücklich ist, denkt falsch. Die Prämisse blendet aus, was nicht machbar ist: Schicksal, Glück, strukturelle Benachteiligung, transgenerationale Bindungen.",
+ wo:"Sie hat eine gute Seite: Sie befähigt Menschen, ihr Leben in die Hand zu nehmen, statt auf äußere Umstände zu warten. Und eine teure: Sie macht das Leiden persönlich, wo es systemisch ist.",
+ gegen:[
+  {t:"Krank wird, wer nicht auf sich achtet.",r:false,f:"Dieselbe Annahme, auf den Körper angewendet."},
+  {t:"Du musst nur an dich glauben.",r:false,f:"Dieselbe Annahme, ins Innere verlegt &mdash; die Machbarkeitsprämisse in der Therapiekultur."},
+  {t:"In manchen Jahren fällt die Ernte schlecht aus.",r:true,f:"Ein Satz, der mit Umständen rechnet, die niemandem gehören. Er klingt altmodisch. Das zeigt, wie tief die andere Prämisse sitzt."},
+  {t:"Jeder ist seines Glückes Schmied.",r:false,f:"Dieselbe Annahme, als Sprichwort geadelt."}
+ ],
+ regel:"Die Prämisse der Machbarkeit macht das Politische persönlich.",
+ quelle:"Kapitel 9 · Prämisse 4: Das Leben ist machbar"
+},
+{
+ satz:"Das kriegen wir in den Griff. Es ist nur eine Frage der Zeit.",
+ woher:"Über Krankheiten, Krisen, den Klimawandel, das Altern.",
+ kurz:"Fortschritt ist die Richtung", familie:"Westlich-modern",
+ optionen:[
+  {t:"Die Geschichte bewegt sich auf Besseres zu; Probleme sind Produkte der Unwissenheit, nicht Schicksal.",r:true,
+   f:"Genau das ist der Bruch, den die wissenschaftliche Revolution gebracht hat: Armut, Krankheit, Krieg, Hunger, Alter, Tod gelten seither als lösbar."},
+  {t:"Technik löst Probleme.",r:false,
+   f:"Zu eng. Der Satz braucht nicht die Technik, sondern die Richtung. Er funktioniert auch bei jemandem, der auf Politik oder Aufklärung setzt."},
+  {t:"Die Wissenschaft ist die verlässlichste Methode.",r:false,
+   f:"Eine Methodenaussage. Der Satz behauptet mehr: dass es überhaupt irgendwohin geht."},
+  {t:"Menschen lernen aus ihren Fehlern.",r:false,
+   f:"Eine hübsche Annahme, die der Satz nicht benötigt &mdash; er verspricht die Lösung auch ohne Einsicht."}
+ ],
+ aufloesung:"Vor der wissenschaftlichen Revolution glaubte kaum jemand an Fortschritt. Die meisten Kulturen gingen davon aus, dass das Goldene Zeitalter in der Vergangenheit lag. Heute gilt: Wird etwas schlechter, ist das die Ausnahme. Wird etwas besser, bestätigt es die Grundrichtung.",
+ wo:"Harari ist skeptisch: Die landwirtschaftliche Revolution hat das Leben der einzelnen Menschen wahrscheinlich schlechter gemacht, obwohl sie die Gattung erfolgreicher machte. Eine Prämisse, die bestätigt, was wir sehen wollen, und ausblendet, was nicht dazu passt.",
+ gegen:[
+  {t:"Irgendwann wird es dafür eine Lösung geben.",r:false,f:"Dieselbe Annahme, in die Zukunft verschoben."},
+  {t:"Rückschläge gehören dazu, unterm Strich geht es aufwärts.",r:false,f:"Dieselbe Annahme &mdash; sie verarbeitet den Gegenbeweis, ohne sich zu ändern. Genau daran erkennt man eine Prämisse."},
+  {t:"Das Goldene Zeitalter liegt hinter uns.",r:true,f:"Für die meisten Kulturen der Geschichte war das die Selbstverständlichkeit. Uns klingt es nach Kulturpessimismus. Das ist der Abstand zwischen zwei Fundamenten."},
+  {t:"Wir sind heute weiter als vor hundert Jahren.",r:false,f:"Dieselbe Annahme, als Bilanz formuliert."}
+ ],
+ regel:"Wenn Rückschritt als Ausnahme gilt und Fortschritt als Bestätigung, ist die Richtung keine Beobachtung mehr. Sie ist eine Prämisse.",
+ quelle:"Kapitel 9 · Prämisse 2: Fortschritt ist die Richtung der Geschichte"
+},
+{
+ satz:"Wir sind heute einfach aufgeklärter als früher.",
+ woher:"Gesagt über frühere Jahrhunderte, über andere Kulturen, über die eigenen Großeltern.",
+ kurz:"Unser Blick ist der neutrale", familie:"Subtraktionserzählung",
+ optionen:[
+  {t:"Die Moderne entstand, indem Irrtümer weggelassen wurden — was übrig blieb, ist deshalb das Universelle.",r:true,
+   f:"Taylor nennt das die Subtraktionserzählung. Sie ist der wirksamste Schutzmechanismus des westlichen Weltbildes, weil sie es unsichtbar macht."},
+  {t:"Bildung nimmt zu.",r:false,
+   f:"Eine Beobachtung, die sich prüfen ließe. Der Satz behauptet mehr: dass das, was übrig blieb, dadurch standpunktfrei geworden ist."},
+  {t:"Religion verliert an Bedeutung.",r:false,
+   f:"Ein soziologischer Befund, keine Grundannahme. Der Satz gilt auch für gläubige Menschen, die sich für aufgeklärt halten."},
+  {t:"Jede Generation weiß mehr als die vorige.",r:false,
+   f:"Das ist die Fortschrittsprämisse &mdash; die Nachbarin. Die Subtraktionserzählung behauptet nicht mehr Wissen, sondern weniger Irrtum. Genau deshalb wirkt sie neutral."}
+ ],
+ aufloesung:"Diese Erzählung ist so verbreitet, dass sie selbst nicht mehr als Erzählung erkannt wird. Sie ist der Hintergrund, vor dem alle anderen Weltbilder als partikular, irrational oder vormodern erscheinen.",
+ wo:"Das ist die tiefste Form von Prämissenarbeit: wenn ein Weltbild sich selbst zum Maßstab aller anderen erklärt. Wenn es nicht mehr eine Sicht auf die Welt ist, sondern die Sicht schlechthin.",
+ gegen:[
+  {t:"Andere Kulturen haben Weltbilder, wir haben Wissen.",r:false,f:"Dieselbe Annahme, unfreundlich ausgesprochen."},
+  {t:"Das ist doch vormodern.",r:false,f:"Dieselbe Annahme als Einordnung des Abweichenden &mdash; ein Urteil ohne Prüfung."},
+  {t:"Vernünftige Menschen denken eben so.",r:false,f:"Dieselbe Annahme in ihrer stärksten Form: Der eigene Standpunkt heißt jetzt Vernunft."},
+  {t:"Auch unser Blick ist ein Standpunkt.",r:true,f:"Der einzige Satz, der das eigene Haus als Haus behandelt. Er ist kein Relativismus &mdash; er ist eine Einladung zur Ehrlichkeit sich selbst gegenüber."}
+ ],
+ regel:"Ein Weltbild ist dann am stärksten, wenn es nicht mehr eine Sicht auf die Welt ist, sondern die Sicht schlechthin.",
+ quelle:"Kapitel 9 · Die Subtraktionserzählung"
+},
+{
+ satz:"Sie müssen weitermachen. Das Experiment verlangt es.",
+ woher:"Yale, 1961. Ein Mann im weißen Kittel sagt diesen Satz ruhig. Zwei Drittel der Versuchspersonen machen weiter — bis zum höchsten Level.",
+ kurz:"Autorität darf befehlen", familie:"Politisch",
+ optionen:[
+  {t:"Wer Autorität ist, darf Befehle erteilen — und ihnen zu folgen ist eine Pflicht, auch ohne einsichtigen Grund.",r:true,
+   f:"Das ist der Kern. Diese Prämisse ist so tief verankert, dass sie in den meisten Fällen das eigene moralische Empfinden übersteigt."},
+  {t:"Menschen sind im Kern grausam.",r:false,
+   f:"Genau das zeigt das Experiment nicht. Die Versuchspersonen litten sichtbar. Es ist kein Experiment über böse Menschen, sondern über eine Prämisse."},
+  {t:"Wissenschaft ist vertrauenswürdig.",r:false,
+   f:"Fachwissen anzuerkennen ist etwas anderes: Dass ein Arzt mehr über Medizin weiß, ist eine Tatsache. Hier geht es um das Recht, Gehorsam zu verlangen."},
+  {t:"Verantwortung lässt sich abgeben.",r:false,
+   f:"Das ist die Folge, nicht die Voraussetzung. Abgeben kann nur, wer die Autorität vorher anerkannt hat."}
+ ],
+ aufloesung:"Kinder kommen nicht als Autoritätsgläubige zur Welt; sie lernen es. Am systematischsten im Klassenzimmer, wo es zwei Klassen von Menschen gibt: Die einen befehlen, bewerten, bestrafen und ändern Regeln &mdash; die anderen dürfen nichts davon. Wer es versucht, begeht ein schweres Fehlverhalten.",
+ wo:"Fichte, Mitgestalter des preußischen Schulsystems, formulierte das Ziel offen: Der Schüler solle so geformt werden, dass er gar nicht anders kann. Das Problem ist nicht die Motivation der Lehrer. Das Problem ist die Struktur.",
+ gegen:[
+  {t:"Der Lehrer darf bewerten, der Schüler nicht.",r:false,f:"Dieselbe Annahme, als Alltagsordnung."},
+  {t:"Befehl ist Befehl.",r:false,f:"Dieselbe Annahme, in ihrer nacktesten Form."},
+  {t:"Ich renne aus dem Theater, weil jemand „Bombe!“ ruft.",r:true,f:"Hier spricht die Sache für sich, nicht der Rang des Rufenden. Man folgt einem Grund, nicht einem Befehl &mdash; das braucht keinen Glauben an Autorität."},
+  {t:"Das steht im Gesetz, also ist es richtig.",r:false,f:"Dieselbe Annahme: Aus der Quelle wird die Begründung. Wer &bdquo;Gesetz&ldquo; sagt, meint schon &bdquo;moralisch bindend&ldquo;."}
+ ],
+ regel:"Gründe abwägen zu können erfordert keinen Glauben an Autorität. Die Prämisse beginnt dort, wo der Befehl auch ohne Grund gilt.",
+ quelle:"Kapitel 10 · Die Prämisse der Autorität"
+},
+{
+ satz:"Endlich eine andere Regierung. Jetzt ändert sich was.",
+ woher:"Nach jeder Wahl, von der jeweils erleichterten Hälfte.",
+ kurz:"Personen wechseln heißt System wechseln", familie:"Politisch",
+ optionen:[
+  {t:"Die Grundstruktur ist neutral; entscheidend ist nur, wer sie besetzt.",r:true,
+   f:"Kuhns Normalwissenschaft, politisch gewendet: Normalpolitik. Verhandelt wird alles &mdash; außer der Struktur, in der verhandelt wird."},
+  {t:"Politiker sind austauschbar.",r:false,
+   f:"Das ist fast das Gegenteil. Der Satz setzt darauf, dass es sehr darauf ankommt, wer regiert."},
+  {t:"Die Demokratie funktioniert.",r:false,
+   f:"Zu grob. Der Satz braucht kein Urteil über die Ordnung, sondern die Annahme, dass sie selbst nicht zur Debatte steht."},
+  {t:"Mehrheiten haben recht.",r:false,
+   f:"Eine Prämisse innerhalb des Paradigmas &mdash; aber nicht die, die dieser Satz benötigt."}
+ ],
+ aufloesung:"Innerhalb eines Paradigmas wird über Steuersätze, Sozialpolitik und Militärausgaben intensiv gestritten. Dass gewählte Vertreter für einen handeln, ist nicht das Thema &mdash; es ist die Voraussetzung, damit das Thema überhaupt entstehen kann.",
+ wo:"Links und Rechts teilen mehr Prämissen, als beide wahrnehmen: die Legitimität des Staates, die Durchsetzung durch Zwang, die Wünschbarkeit von Wachstum, das Individuum als Grundbaustein. Rose zieht die scharfe Konsequenz: Eine Revolution, die den alten Meister durch einen neuen ersetzt, ohne das Prinzip der Meisterschaft zu prüfen, ist ein Personalwechsel.",
+ gegen:[
+  {t:"Wir brauchen bessere Leute an der Spitze.",r:false,f:"Dieselbe Annahme, als Personalfrage."},
+  {t:"Mit einer anderen Mehrheit wäre das nicht passiert.",r:false,f:"Dieselbe Annahme, rückwärts erzählt."},
+  {t:"Welche Fragen kann dieses System gar nicht stellen?",r:true,f:"Die einzige Frage, die das Paradigma selbst berührt &mdash; und die in der Normalpolitik nie vorkommt."},
+  {t:"Nächste Wahl machen wir es besser.",r:false,f:"Dieselbe Annahme, vertagt."}
+ ],
+ regel:"Innerhalb eines Paradigmas kann man leidenschaftlich streiten und nichts bewegen.",
+ quelle:"Kapitel 10 · Normalpolitik / Links und Rechts als Prämissensysteme"
+},
+{
+ satz:"Ich habe ihm die Zahlen doch gezeigt. Er will es einfach nicht verstehen.",
+ woher:"Nach jeder gescheiterten Diskussion, von beiden Seiten gleichzeitig.",
+ kurz:"Es gibt eine gemeinsame Messlatte", familie:"Paradigmen",
+ optionen:[
+  {t:"Es gibt eine neutrale Sprache, in der sich beide Seiten messen lassen — wer ihr nicht folgt, will nicht.",r:true,
+   f:"Kuhn nennt das Fehlen dieser Sprache Inkommensurabilität. Was für den einen ein offensichtlicher Beweis ist, ist für den anderen schlicht irrelevant."},
+  {t:"Zahlen lügen nicht.",r:false,
+   f:"Nah dran, aber zu klein. Nicht die Zahlen sind das Problem, sondern die Annahme, dass sie für beide dasselbe bedeuten."},
+  {t:"Der andere ist unehrlich.",r:false,
+   f:"Das ist die Schlussfolgerung des Satzes, nicht seine Voraussetzung. Sie wird nötig, weil die Voraussetzung nicht in Frage gestellt wird."},
+  {t:"Bildung schützt vor Irrtum.",r:false,
+   f:"Der Satz gilt auch zwischen zwei hochgebildeten Menschen. Genau das macht ihn so verlässlich falsch."}
+ ],
+ aufloesung:"Zwei Menschen diskutieren. Beide sind intelligent, beide meinen es ernst, beide reden aneinander vorbei. Sie teilen keine gemeinsame Basis &mdash; und sie wissen es meistens nicht. Also halten sie einander für boshaft, ungebildet oder manipuliert.",
+ wo:"Kuhn schlägt vor, Menschen in verschiedenen Paradigmen als Mitglieder verschiedener Sprachgemeinschaften zu verstehen: Ihre Kommunikationsprobleme sind Übersetzungsprobleme. Das ist keine Resignation, sondern eine Diagnose. Übersetzungsarbeit ist aufwändig, unsicher und oft unvollständig &mdash; aber sie ist möglich.",
+ gegen:[
+  {t:"Wenn er die Studie nur läse, würde er es einsehen.",r:false,f:"Dieselbe Annahme, hoffnungsvoll formuliert."},
+  {t:"Der ist doch manipuliert.",r:false,f:"Dieselbe Annahme, an ihrem Ende: Wenn es eine gemeinsame Messlatte gibt, muss der andere verblendet sein."},
+  {t:"Was gilt für dich überhaupt als Beweis?",r:true,f:"Die Frage, mit der Übersetzung beginnt. Sie klingt banal und ist in Streitgesprächen fast unerhört selten."},
+  {t:"Man muss nur sachlich bleiben, dann einigt man sich.",r:false,f:"Dieselbe Annahme, als Tugendlehre."}
+ ],
+ regel:"Zwischen zwei Weltbildern gibt es keine neutrale Sprache. Es gibt nur Übersetzungsarbeit.",
+ quelle:"Kapitel 10 · Inkommensurabilität"
+},
+{
+ satz:"Sie ist so reif für ihr Alter.",
+ woher:"Über ein zwölfjähriges Mädchen, das die Mutter tröstet, wenn sie weint, und den Vater aufmuntert, wenn er schweigt. Die Lehrer loben sie, die Eltern sind stolz.",
+ kurz:"Das Symptom gehört dem, der es zeigt", familie:"Familienfeld",
+ optionen:[
+  {t:"Was ein Mensch zeigt, gehört ihm selbst — es ist seine Eigenschaft, nicht die Aufgabe eines Systems.",r:true,
+   f:"Deshalb wird gelobt, was in Wirklichkeit eine Übernahme ist. Das Lob bestätigt die Rolle und macht sie unsichtbar."},
+  {t:"Kinder entwickeln sich unterschiedlich schnell.",r:false,
+   f:"Wahr und harmlos &mdash; und genau darum die Erklärung, die den Blick schließt."},
+  {t:"Wer früh Verantwortung übernimmt, kommt im Leben weiter.",r:false,
+   f:"Eine Lebensweisheit, die der Satz nicht braucht. Er braucht die Annahme, wem das Verhalten überhaupt gehört."},
+  {t:"Eltern prägen ihre Kinder.",r:false,
+   f:"Richtig und zu allgemein. Es erklärt nicht, warum gerade dieses Kind gerade diese Rolle übernimmt."}
+ ],
+ aufloesung:"Nagy nennt das Parentifizierung: Das Kind wird seinen Eltern zur Mutter oder zum Vater &mdash; es tröstet, es hält die Ehe zusammen, es gibt Selbstwert, den ein Elternteil woanders nicht findet. Solche Kinder gelten als reif, ernsthaft, verantwortungsbewusst. Und werden als Kinder nie satt.",
+ wo:"Familien führen über Generationen eine Buchhaltung von Verdienst und Verpflichtung. Sie ist niemals schriftlich und niemals bewusst &mdash; aber sie wirkt, und wo sie im Ungleichgewicht bleibt, sucht das System den Ausgleich. Oft bei dem, der am wenigsten damit zu tun hatte.",
+ gegen:[
+  {t:"Der Junge ist einfach schwierig.",r:false,f:"Dieselbe Annahme, negativ gewendet: Das Verhalten gehört dem Träger."},
+  {t:"Sie hat eine Essstörung, wir müssen sie behandeln.",r:false,f:"Dieselbe Annahme, medizinisch. Selvini wusste: Ein Symptom mit einer Funktion im System verschwindet nicht durch Behandlung des Trägers."},
+  {t:"Heilt das Symptom, ohne dass sich das System ändert, übernimmt es ein anderes Familienmitglied.",r:true,f:"Der Satz sieht das Spiel statt den Spieler. Er ist die Grundeinsicht der systemischen Familientherapie."},
+  {t:"Er hat es einfach im Blut.",r:false,f:"Dieselbe Annahme, ins Biologische verschoben."}
+ ],
+ regel:"Ein Symptom ist selten ein individueller Defekt. Es ist ein Spielzug in einem Spiel, das die ganze Familie spielt.",
+ quelle:"Kapitel 12 · Die Felder der Familie"
+},
+{
+ satz:"Das bildest du dir ein.",
+ woher:"Antwort auf eine Erfahrung, die sich nicht messen lässt.",
+ kurz:"Wirklich ist nur das Stoffliche", familie:"Materialistisch",
+ optionen:[
+  {t:"Wirklich ist nur, was sich stofflich erklären lässt — Bewusstsein ist ein Nebenprodukt der Materie.",r:true,
+   f:"Sheldrake zählt das zu den Dogmen des Materialismus: Alles sei mechanischer Natur, Materie habe keine Innerlichkeit, die Naturgesetze stünden ein für alle Mal fest."},
+  {t:"Menschen täuschen sich häufig.",r:false,
+   f:"Wahr, aber das ist die Begründung, nicht die Annahme. Der Satz behauptet nicht einen Irrtum im Einzelfall, sondern die Unwirklichkeit einer ganzen Kategorie."},
+  {t:"In der Wissenschaft zählt nur Messbares.",r:false,
+   f:"Sehr nah dran &mdash; aber das ist eine Methodenregel und völlig legitim. Zur Prämisse wird sie erst, wenn aus &bdquo;nicht messbar&ldquo; ein &bdquo;nicht wirklich&ldquo; wird."},
+  {t:"Der Mensch ist grundsätzlich erkennbar.",r:false,
+   f:"Eine erkenntnistheoretische Zuversicht, die der Satz nicht benötigt."}
+ ],
+ aufloesung:"Ein Dogma ist ursprünglich ein theologischer Begriff: ein Glaubenssatz, der nicht hinterfragt wird, weil er zum Fundament gehört. Sheldrake überträgt ihn bewusst auf die Naturwissenschaft. Nie bewiesen, nur vorausgesetzt &mdash; und deshalb nicht als Annahme erkannt, sondern für die Natur der Dinge gehalten.",
+ wo:"Die Epizyklen des herrschenden Weltbildes werden zahlreicher: dunkle Materie, die man nicht findet, dunkle Energie, die man nicht erklärt, Bewusstsein, das in keiner Theorie Platz hat. So sah es 1543 auch aus, kurz bevor jemand die Sonne in die Mitte stellte.",
+ gegen:[
+  {t:"Hunde sind komplexe Mechanismen, keine Wesen mit eigenen Zielen.",r:false,f:"Dasselbe Dogma, offen ausgesprochen."},
+  {t:"Das Gehirn ist ein genetisch programmierter Computer.",r:false,f:"Dasselbe Dogma, in der Sprache der Informatik."},
+  {t:"Dafür haben wir bislang keine Erklärung.",r:true,f:"Ein offener Satz. Er entscheidet nicht über die Wirklichkeit der Sache, er beschreibt den Stand des Wissens &mdash; Wand-Ebene statt Fundament."},
+  {t:"Bewusstsein ist eine Täuschung, die das Gehirn erzeugt.",r:false,f:"Dasselbe Dogma, in seiner radikalsten Fassung."}
+ ],
+ regel:"In jedem herrschenden Weltbild gibt es Dogmen — auch im vermeintlich aufgeklärten. Sie werden nur nicht als solche erkannt.",
+ quelle:"Kapitel 13 · Die zehn Dogmen des Materialismus"
+},
+{
+ satz:"Er macht mich wütend.",
+ woher:"Der harmloseste Satz dieser Reihe. Und der folgenreichste.",
+ kurz:"Die Ursache liegt außen", familie:"Projektion",
+ optionen:[
+  {t:"Wahrnehmung bildet ab, was draußen ist — mein Zustand ist die Folge, nicht der Ursprung.",r:true,
+   f:"Der Kurs dreht genau diesen Satz um: &bdquo;Wahrnehmung wird durch Projektion erzeugt.&ldquo; Wir sehen nicht die Welt, wie sie ist, sondern halten unsere Projektion für sie."},
+  {t:"Menschen können einander verletzen.",r:false,
+   f:"Das bestreitet niemand. Der Satz behauptet mehr: dass die Ursache dort liegt, wo ich sie sehe."},
+  {t:"Gefühle lassen sich nicht steuern.",r:false,
+   f:"Eine Aussage über Kontrolle, nicht über Herkunft. Der Satz handelt von der Herkunft."},
+  {t:"Wut ist schlecht.",r:false,
+   f:"Eine Bewertung. Der Satz funktioniert unabhängig davon, ob man Wut für schlecht oder für berechtigt hält."}
+ ],
+ aufloesung:"Das Ego ist im Kurs nicht das alltägliche Ich-Gefühl, sondern die Identifikation mit einem getrennten, verletzlichen Selbst. Sein Überlebensmechanismus ist ständige Projektion: Was innen nicht anerkannt wird &mdash; Schuld, Angst, Angriff &mdash;, wird nach außen geschoben und dort bekämpft.",
+ wo:"Man muss dem Kurs nicht folgen, um den Mechanismus zu sehen. Er macht in Reinform sichtbar, was jede Prämisse tut: Sie erzeugt die Welt, in der sie stimmt. Watzlawick hat dasselbe nüchterner gesagt &mdash; der Glaube, es gebe nur eine Wirklichkeit, ist die gefährlichste Selbsttäuschung.",
+ gegen:[
+  {t:"Diese Stadt deprimiert mich.",r:false,f:"Dieselbe Annahme, auf einen Ort übertragen."},
+  {t:"Wenn die anderen sich ändern, geht es mir besser.",r:false,f:"Dieselbe Annahme, als Lebensplan. Deshalb wartet man lange."},
+  {t:"Ich werde wütend, wenn er das sagt — und ich weiß nicht, warum ausgerechnet ich.",r:true,f:"Der Satz lässt die Frage offen, statt sie nach außen zu beantworten. Mehr braucht es zunächst nicht."},
+  {t:"Der Ton in diesem Haus macht alle krank.",r:false,f:"Dieselbe Annahme, kollektiv formuliert."}
+ ],
+ regel:"Wir sehen nicht die Welt, wie sie ist. Wir projizieren — und halten das Ergebnis für die Wirklichkeit.",
+ quelle:"Kapitel 14 · Ein Kurs in Wundern: Die Welt als eigene Projektion"
+}
+];
+
+/* Die richtige Antwort darf nicht immer an derselben Stelle stehen.
+   Feste, nicht zufällige Rotation: gleiche Reihenfolge bei jedem Laden. */
+function rot(a,n){ n=n%a.length; return a.slice(n).concat(a.slice(0,n)); }
+const ROT_A=[0,2,3,1,2,0,3,1,3,2,1], ROT_B=[1,0,3,2,1,0,3,2,1,0,3];
+SAETZE.forEach((s,i)=>{ s.optionen=rot(s.optionen,ROT_A[i%ROT_A.length]); s.gegen=rot(s.gegen,ROT_B[i%ROT_B.length]); });
+
+const MAX1=FAELLE.length*4, MAX2=SAETZE.length*4;
+const seite=document.getElementById("seitenleiste");
 const caseEl=document.getElementById("case");
-const stateEl=document.getElementById("schnittState");
-const noteEl=document.getElementById("schnittNote");
+const subline=document.getElementById("subline");
+let bandEls={};
 
-let S={i:0,punkte:0,phase:"intro",dx:null,akt:null,log:[]};
+let S={modus:0,i:0,punkte:0,phase:"menu",a1:null,a2:null,log:[]};
 
-/* ---- Schnitt ---- */
-bandsEl.innerHTML=EBENEN.map(e=>
- '<button class="band" type="button" data-id="'+e.id+'" disabled>'+
- '<span class="code">'+e.code+'</span>'+
- '<span><span class="bname">'+e.name+'</span><span class="bterm">'+e.term+'</span></span>'+
- '<span class="mk"></span></button>').join("");
-const bandEls={};
-EBENEN.forEach(e=>{bandEls[e.id]=bandsEl.querySelector('[data-id="'+e.id+'"]')});
-bandsEl.addEventListener("click",ev=>{
- const b=ev.target.closest(".band"); if(!b||b.disabled) return; waehleEbene(b.dataset.id);
-});
+/* ---------- Seitenleiste ---------- */
+function seiteAus(){ seite.hidden=true; seite.innerHTML=""; bandEls={}; }
 
+function seiteSchnitt(){
+ seite.hidden=false;
+ seite.innerHTML='<div class="schnitt-head"><span class="t">Der Schnitt</span><span class="t" id="sState">Fünf Ebenen</span></div>'+
+  '<div class="bands" id="bands">'+EBENEN.map(e=>
+   '<button class="band" type="button" data-id="'+e.id+'" disabled>'+
+   '<span class="code">'+e.code+'</span>'+
+   '<span><span class="bname">'+e.name+'</span><span class="bterm">'+e.term+'</span></span>'+
+   '<span class="mk"></span></button>').join("")+'</div>'+
+  '<p class="schnitt-note" id="sNote">Der Bauplan ist gestrichelt gezeichnet: Er liegt nicht tiefer als das Fundament, sondern quer zu allem.</p>';
+ bandEls={}; EBENEN.forEach(e=>{bandEls[e.id]=seite.querySelector('.band[data-id="'+e.id+'"]')});
+ seite.querySelector("#bands").addEventListener("click",ev=>{
+  const b=ev.target.closest(".band"); if(!b||b.disabled) return; waehleEbene(b.dataset.id);
+ });
+}
 function schnittLive(live){
- bandsEl.classList.toggle("is-live",live);
+ const bands=seite.querySelector("#bands"); if(!bands) return;
+ bands.classList.toggle("is-live",live);
  EBENEN.forEach(e=>{const b=bandEls[e.id];b.disabled=!live;b.className="band";b.querySelector(".mk").textContent="";});
 }
 function schnittMarkieren(gewaehlt,richtig){
  EBENEN.forEach(e=>{
-  const b=bandEls[e.id]; b.disabled=true; b.className="band";
+  const b=bandEls[e.id]; if(!b) return;
+  b.disabled=true; b.className="band";
   const mk=b.querySelector(".mk");
   if(e.id===richtig){b.classList.add("correct");mk.textContent="✓";}
   else if(e.id===gewaehlt){b.classList.add("wrong");mk.textContent="✕";}
   else b.classList.add("dim");
  });
- bandsEl.classList.remove("is-live");
+ const bands=seite.querySelector("#bands"); if(bands) bands.classList.remove("is-live");
+}
+function sKopf(a,b){
+ const st=seite.querySelector("#sState"), nt=seite.querySelector("#sNote");
+ if(st) st.textContent=a; if(nt) nt.textContent=b;
 }
 
-/* ---- Bildschirme ---- */
-function intro(){
- S={i:0,punkte:0,phase:"intro",dx:null,akt:null,log:[]};
- schnittLive(false); stateEl.textContent="Fünf Ebenen";
- noteEl.textContent="Der Bauplan ist gestrichelt gezeichnet: Er liegt nicht tiefer als das Fundament, sondern quer zu allem.";
+function seiteRegister(){
+ seite.hidden=false;
+ seite.innerHTML='<div class="schnitt-head"><span class="t">Das Register</span><span class="t" id="sState">0 von '+SAETZE.length+'</span></div>'+
+  '<div class="regliste" id="regliste"></div>'+
+  '<p class="schnitt-note" id="sNote">Jede erkannte Grundannahme wird hier eingetragen. Am Ende steht dein Fundamentplan.</p>';
+ registerZeichnen();
+}
+function registerZeichnen(){
+ const l=seite.querySelector("#regliste"); if(!l) return;
+ l.innerHTML=SAETZE.map((s,k)=>{
+  const e=S.log.find(x=>x.k===k);
+  const code="P"+String(k+1).padStart(2,"0");
+  let cls="reg"+(e?" voll":" leer")+(k===S.i&&S.modus===2&&!e?" jetzt":"")+(e&&!e.ok1?" verfehlt":"");
+  const name=e?s.kurz:"— — —";
+  const fam=e?'<span class="rfam">'+s.familie+(e.ok1?"":" · nachgetragen")+'</span>':"";
+  return '<div class="'+cls+'"><span class="code">'+code+'</span><span class="rname">'+name+fam+'</span></div>';
+ }).join("");
+ const st=seite.querySelector("#sState");
+ if(st) st.textContent=S.log.length+" von "+SAETZE.length;
+}
+
+/* ---------- Menü ---------- */
+function menue(){
+ S={modus:0,i:0,punkte:0,phase:"menu",a1:null,a2:null,log:[]};
+ seiteAus();
+ subline.textContent="Zwei Übungen zum Buch. Die Frage ist nie, wer recht hat — sondern worauf gestritten wird.";
+ caseEl.classList.remove("gelesen");
  caseEl.innerHTML=
  '<div class="intro">'+
  '<h2>Zwei Menschen streiten über Möbel, während ihr Konflikt im Fundament liegt.</h2>'+
- '<p class="lead">Die meisten Auseinandersetzungen laufen nicht ins Leere, weil jemand falsch liegt, sondern weil auf der falschen Etage verhandelt wird. Das Buch nennt das den Ebenen-Sprung. Er ist nicht selten &mdash; er ist die Regel.</p>'+
- '<p>Du bekommst zehn Fälle aus Büros, Wohnzimmern und Talkshows. Zu jedem entscheidest du zweimal.</p>'+
- '<ol class="schritte">'+
- '<li><div><b>Diagnose</b><span>Auf welcher Ebene liegt der Konflikt wirklich? Du antwortest, indem du links in die Etage klickst.</span></div></li>'+
- '<li><div><b>Handlung</b><span>Was tust du? Jede Option setzt auf einer Ebene an &mdash; nur eine trifft die richtige.</span></div></li>'+
- '<li><div><b>Auswertung</b><span>Am Ende siehst du, wohin du systematisch greifst: zu weit oben, zu tief, oder genau hin.</span></div></li>'+
- '</ol>'+
- '<div class="actions"><button class="btn" type="button" id="go">Ersten Fall öffnen</button>'+
- '<span style="font-family:var(--mono);font-size:11.5px;color:var(--ink-3)">10 Fälle · ca. 12 Minuten</span></div>'+
+ '<p class="lead">Die meisten Auseinandersetzungen laufen nicht ins Leere, weil jemand falsch liegt, sondern weil auf der falschen Etage verhandelt wird — oder weil eine Annahme mitspielt, die niemand ausgesprochen hat. Beides lässt sich üben.</p>'+
+ '<div class="modi">'+
+  '<button class="modus" type="button" id="m1">'+
+   '<span class="mn">Modus 1</span><h3>Die Ebene finden</h3>'+
+   '<span class="md">Zehn Konflikte aus Büros, Wohnzimmern und Konferenzen. Auf welcher der fünf Ebenen liegt der Streit wirklich — und wo setzt du an?</span>'+
+   '<span class="mf">10 Fälle · ca. 12 Minuten</span></button>'+
+  '<button class="modus" type="button" id="m2">'+
+   '<span class="mn">Modus 2</span><h3>Die Prämisse finden</h3>'+
+   '<span class="md">Elf Sätze, die selbstverständlich klingen. Welche Grundannahme muss gelten, damit sie das tun? Und welcher ähnliche Satz steht auf einem anderen Fundament?</span>'+
+   '<span class="mf">11 Sätze · ca. 14 Minuten</span></button>'+
+ '</div>'+
+ '<p style="font-size:14.5px;margin-top:20px">Modus 1 arbeitet mit der Haus-Metapher aus Teil I. Modus 2 mit den Weltbildern aus Teil III — vom Individualismus über die Prämisse der Autorität bis zur Projektion.</p>'+
  '</div>';
- document.getElementById("go").onclick=()=>{S.phase="dx";render();};
+ document.getElementById("m1").onclick=()=>starte(1);
+ document.getElementById("m2").onclick=()=>starte(2);
+ speichern();
 }
 
+function starte(m){
+ S={modus:m,i:0,punkte:0,phase:m===1?"dx":"p1",a1:null,a2:null,log:[]};
+ if(m===1){seiteSchnitt();subline.textContent="Modus 1 — Die Ebene finden: Möbel, Wände, Fundament, Bauplan oder Landschaft.";}
+ else {seiteRegister();subline.textContent="Modus 2 — Die Prämisse finden: Welche Annahme muss gelten, damit ein Satz selbstverständlich klingt?";}
+ render(); speichern();
+}
+
+/* ---------- gemeinsame Bausteine ---------- */
+function casebar(links,rechts){
+ return '<div class="casebar"><span>'+links+'</span><span class="pts">'+rechts+'</span></div>';
+}
+function optionsBlock(liste,offen,gewaehlt,istBest,alleFb){
+ let h='<div class="opts" id="opts">';
+ liste.forEach((o,k)=>{
+  const ltr=["A","B","C","D"][k];
+  let cls="opt", fb="";
+  if(!offen){
+   const best=istBest(o), gew=k===gewaehlt;
+   cls+=best?" best":(gew?" miss":"");
+   if(!best&&!gew) cls+=" faded";
+   if(gew||best||alleFb) fb='<p class="fb">'+o.tag+o.f+'</p>';
+  }
+  h+='<button class="'+cls+'" type="button" data-k="'+k+'"'+(offen?"":" disabled")+'>'+
+     '<span class="ltr">'+ltr+'</span><span>'+o.t+fb+'</span></button>';
+ });
+ return h+'</div>';
+}
+function regelBlock(regel,quelle,label){
+ return '<div class="regel"><p class="t">'+label+'</p><p>'+regel+'</p><p class="quelle">'+quelle+'</p></div>';
+}
+function weiterBtn(text){
+ return '<div class="actions"><button class="btn" type="button" id="next">'+text+'</button></div>';
+}
+
+/* ---------- Router ---------- */
 function render(){
- if(S.phase==="intro"){intro();return;}
+ if(S.phase==="menu"){menue();return;}
  if(S.phase==="ende"){ende();return;}
- const f=FAELLE[S.i];
- const nr=String(S.i+1).padStart(2,"0");
- let h='<div class="casebar"><span>Fall '+nr+' / '+FAELLE.length+'</span><span class="pts">'+S.punkte+' von '+MAX+' Punkten</span></div>'+
-  '<span class="kat">'+f.kat+'</span>'+
-  '<h2>'+f.titel+'</h2>'+
-  '<p class="szenario">'+f.szenario+'</p>';
+ if(S.modus===1) renderFall(); else renderSatz();
+}
+
+/* ---------- Modus 1 ---------- */
+function renderFall(){
+ const f=FAELLE[S.i], nr=String(S.i+1).padStart(2,"0");
+ let h=casebar("Fall "+nr+" / "+FAELLE.length,S.punkte+" von "+MAX1+" Punkten")+
+  '<span class="kat">'+f.kat+'</span><h2>'+f.titel+'</h2><p class="szenario">'+f.szenario+'</p>';
 
  if(S.phase==="dx"){
   schnittLive(true);
-  stateEl.textContent="Wähle eine Etage";
-  noteEl.textContent="Klicke in die Ebene, auf der der Konflikt deiner Meinung nach wirklich liegt.";
+  sKopf("Wähle eine Etage","Klicke in die Ebene, auf der der Konflikt deiner Meinung nach wirklich liegt.");
   h+='<div class="frage"><p class="frage-t">Frage 1 · Diagnose</p>'+
      '<p class="frage-q">Auf welcher Ebene liegt dieser Konflikt wirklich?</p>'+
-     '<p class="hinweis">Antworte im Schnitt &mdash; Möbel, Wände, Fundament, Bauplan oder Landschaft.</p></div>';
-  caseEl.innerHTML=h; caseEl.classList.remove("gelesen"); window.scrollTo({top:0,behavior:"smooth"}); return;
+     '<p class="hinweis">Antworte im Schnitt — Möbel, Wände, Fundament, Bauplan oder Landschaft.</p></div>';
+  caseEl.innerHTML=h; caseEl.classList.remove("gelesen");
+  window.scrollTo({top:0,behavior:"smooth"}); return;
  }
 
- /* Diagnose ist gefallen */
- const richtig=S.dx===f.ebene;
- const eName=id=>EBENEN.find(e=>e.id===id).name;
+ const richtig=S.a1===f.ebene, eName=id=>EBENEN.find(e=>e.id===id).name;
  h+='<div class="frage"><p class="frage-t">Frage 1 · Diagnose</p>'+
     '<p class="frage-q">Auf welcher Ebene liegt dieser Konflikt wirklich?</p>'+
     '<div class="fb" style="border-top:none;padding-top:4px">'+
-    (richtig
-      ? '<span class="tag t-ok">Getroffen</span>'+eName(f.ebene)+'. '
-      : '<span class="tag t-miss">Daneben</span>Du hast '+eName(S.dx)+' gewählt. Der Konflikt liegt auf der Ebene '+eName(f.ebene)+'. ')+
+    (richtig?'<span class="tag t-ok">Getroffen</span>'+eName(f.ebene)+'.'
+            :'<span class="tag t-miss">Daneben</span>Du hast '+eName(S.a1)+' gewählt. Der Konflikt liegt auf der Ebene '+eName(f.ebene)+'.')+
     '</div></div>'+
-  '<div class="aufloesung"><p class="t">Was hier wirklich passiert</p><p>'+f.aufloesung+'</p></div>';
-
- h+='<div class="frage"><p class="frage-t">Frage 2 · Handlung</p><p class="frage-q">'+f.frage2+'</p><div class="opts" id="opts">';
- f.optionen.forEach((o,k)=>{
-  const ltr=["A","B","C","D"][k];
-  let cls="opt", fb="";
-  if(S.phase==="fertig"){
-   const best=o.p===2, gewaehlt=k===S.akt;
-   cls+=best?" best":(gewaehlt?" miss":"");
-   if(!best&&!gewaehlt) cls+=" faded";
-   if(gewaehlt||best){
-    const tag=o.p===2?'<span class="tag t-ok">Trifft</span>':(o.p===1?'<span class="tag t-mid">Halb</span>':'<span class="tag t-miss">Ebenen-Sprung</span>');
-    fb='<p class="fb">'+tag+o.f+'</p>';
-   }
-  }
-  h+='<button class="'+cls+'" type="button" data-k="'+k+'"'+(S.phase==="fertig"?" disabled":"")+'>'+
-     '<span class="ltr">'+ltr+'</span><span>'+o.t+fb+'</span></button>';
- });
- h+='</div></div>';
+  '<div class="aufloesung"><p class="t">Was hier wirklich passiert</p><p>'+f.aufloesung+'</p></div>'+
+  '<div class="frage"><p class="frage-t">Frage 2 · Handlung</p><p class="frage-q">'+f.frage2+'</p>'+
+  optionsBlock(f.optionen.map(o=>({t:o.t,f:o.f,p:o.p,
+     tag:o.p===2?'<span class="tag t-ok">Trifft</span>':(o.p===1?'<span class="tag t-mid">Halb</span>':'<span class="tag t-miss">Ebenen-Sprung</span>')})),
+    S.phase==="akt",S.a2,o=>o.p===2)+'</div>';
 
  if(S.phase==="fertig"){
-  h+='<div class="regel"><p class="t">Die unsichtbare Spielregel</p><p>'+f.regel+'</p>'+
-     '<p class="quelle">'+f.quelle+'</p></div>'+
-     '<div class="actions"><button class="btn" type="button" id="next">'+
-     (S.i===FAELLE.length-1?"Auswertung ansehen":"Nächster Fall")+'</button></div>';
+  h+=regelBlock(f.regel,f.quelle,"Die unsichtbare Spielregel")+
+     weiterBtn(S.i===FAELLE.length-1?"Auswertung ansehen":"Nächster Fall");
  }
  caseEl.innerHTML=h; caseEl.classList.add("gelesen");
- if(S.phase==="akt"){
-  document.getElementById("opts").addEventListener("click",ev=>{
-   const b=ev.target.closest(".opt"); if(!b) return; waehleHandlung(+b.dataset.k);
-  });
- }else{
-  document.getElementById("next").onclick=()=>{
-   if(S.i===FAELLE.length-1){S.phase="ende";}
-   else{S.i++;S.phase="dx";S.dx=null;S.akt=null;}
-   render();
-  };
- }
+ verdrahten();
 }
 
 function waehleEbene(id){
  const f=FAELLE[S.i];
- S.dx=id; S.phase="akt";
+ S.a1=id; S.phase="akt";
  if(id===f.ebene) S.punkte+=2;
  schnittMarkieren(id,f.ebene);
- stateEl.textContent=(id===f.ebene?"Getroffen":"Daneben");
- noteEl.textContent="Rot markiert die gewählte Etage, grün die, auf der der Konflikt liegt.";
+ sKopf(id===f.ebene?"Getroffen":"Daneben","Rot markiert die gewählte Etage, grün die, auf der der Konflikt liegt.");
  render(); speichern();
 }
-
 function waehleHandlung(k){
  const f=FAELLE[S.i];
- S.akt=k; S.punkte+=f.optionen[k].p; S.phase="fertig";
- S.log.push({ebene:f.ebene,dx:S.dx,dxOk:S.dx===f.ebene,p:f.optionen[k].p,aktEbene:f.optionen[k].e});
+ S.a2=k; S.punkte+=f.optionen[k].p; S.phase="fertig";
+ S.log.push({k:S.i,ebene:f.ebene,dx:S.a1,ok1:S.a1===f.ebene,p:f.optionen[k].p});
  render(); speichern();
 }
 
-/* ---- Auswertung ---- */
-function ende(){
- schnittLive(false);
- EBENEN.forEach(e=>{bandEls[e.id].className="band";bandEls[e.id].querySelector(".mk").textContent="";});
- stateEl.textContent="Deine Karte";
- noteEl.textContent="Die Ebenen bleiben. Was sich ändert, ist, auf welcher du zuerst nachsiehst.";
+/* ---------- Modus 2 ---------- */
+function renderSatz(){
+ const s=SAETZE[S.i], nr=String(S.i+1).padStart(2,"0");
+ let h=casebar("Satz "+nr+" / "+SAETZE.length,S.punkte+" von "+MAX2+" Punkten")+
+  '<div class="satzkarte"><p class="t">Der Satz</p><q>'+s.satz+'</q>'+
+  '<p class="woher">'+s.woher+'</p></div>';
 
- const treffer=S.log.filter(l=>l.dxOk).length;
- const spruenge=S.log.filter(l=>l.p===0).length;
- const daneben=S.log.filter(l=>!l.dxOk);
- let delta=0; daneben.forEach(l=>{delta+=TIEFE[l.dx]-TIEFE[l.ebene];});
- const schnitt=daneben.length?delta/daneben.length:0;
+ const offen1=S.phase==="p1";
+ h+='<div class="frage"><p class="frage-t">Frage 1 · Die Annahme</p>'+
+    '<p class="frage-q">Welche Grundannahme muss gelten, damit dieser Satz selbstverständlich klingt?</p>'+
+    optionsBlock(s.optionen.map(o=>({t:o.t,f:o.f,r:o.r,
+      tag:o.r?'<span class="tag t-ok">Trifft</span>':'<span class="tag t-miss">Daneben</span>'})),
+     offen1,S.a1,o=>o.r===true,true)+'</div>';
 
- let titel,deutung;
- if(S.punkte>=34){titel="Architekturbewusstsein";}
- else if(S.punkte>=25){titel="Du siehst das Haus";}
- else if(S.punkte>=15){titel="Zwischen den Etagen";}
- else{titel="Willkommen im Möbelstreit";}
-
- if(daneben.length===0){
-  deutung="Zehn von zehn Diagnosen richtig. Das Werkzeug sitzt. Die schwerere Übung beginnt dort, wo du selbst im Raum stehst: Welche Ebene deines eigenen Hauses prüfst du gerade nicht?";
- }else if(schnitt<=-0.5){
-  deutung="Deine Fehldiagnosen liegen fast alle weiter oben als der Konflikt. Du suchst das Problem dort, wo es sichtbar ist &mdash; bei Maßnahmen, Zahlen, Formulierungen. Das ist die häufigste Richtung des Ebenen-Sprungs und der Grund, warum gute Kompromisse scheitern.";
- }else if(schnitt>=0.5){
-  deutung="Deine Fehldiagnosen liegen weiter unten als der Konflikt. Du vermutest Fundament und Weltbild, wo Möbel und Wände gemeint sind. Das Werkzeug ist scharf, aber wer überall Tiefe sucht, verwandelt den Ebenen-Check selbst in ein Ritual.";
- }else{
-  deutung="Deine Fehldiagnosen gehen in beide Richtungen &mdash; mal zu flach, mal zu tief. Keine feste Schlagseite, aber auch noch kein sicherer Blick für die Etage.";
+ if(!offen1){
+  h+='<div class="aufloesung"><p class="t">Die Prämisse</p><p class="name">'+s.kurz+'</p><p>'+s.aufloesung+'</p>'+
+     '<p class="wo"><b>Wo sie nicht gilt</b>'+s.wo+'</p></div>'+
+     '<div class="frage"><p class="frage-t">Frage 2 · Der Gegencheck</p>'+
+     '<p class="frage-q">Welcher dieser Sätze steht <em>nicht</em> auf derselben Annahme?</p>'+
+     optionsBlock(s.gegen.map(o=>({t:o.t,f:o.f,r:o.r,
+       tag:o.r?'<span class="tag t-ok">Anderes Fundament</span>':'<span class="tag t-mid">Dieselbe Annahme</span>'})),
+      S.phase==="p2",S.a2,o=>o.r===true,true)+'</div>';
  }
- if(spruenge>0) deutung+=" Bei "+spruenge+" von "+FAELLE.length+" Fällen hat deine Handlung auf einer Ebene angesetzt, auf der das Problem nicht lag.";
+ if(S.phase==="fertig"){
+  h+=regelBlock(s.regel,s.quelle,"Die unsichtbare Spielregel")+
+     weiterBtn(S.i===SAETZE.length-1?"Fundamentplan ansehen":"Nächster Satz");
+ }
+ caseEl.innerHTML=h;
+ caseEl.classList.toggle("gelesen",!offen1);
+ verdrahten();
+ registerZeichnen();
+ if(offen1) window.scrollTo({top:0,behavior:"smooth"});
+}
 
- const proEbene=EBENEN.map(e=>{
-  const alle=S.log.filter(l=>l.ebene===e.id);
-  const ok=alle.filter(l=>l.dxOk).length;
-  return {e:e,ok:ok,n:alle.length};
- });
+function waehlePraemisse(k){
+ const s=SAETZE[S.i];
+ S.a1=k; S.phase="p2";
+ if(s.optionen[k].r) S.punkte+=2;
+ render(); speichern();
+}
+function waehleGegen(k){
+ const s=SAETZE[S.i];
+ S.a2=k; S.phase="fertig";
+ if(s.gegen[k].r) S.punkte+=2;
+ S.log.push({k:S.i,ok1:s.optionen[S.a1].r===true,ok2:s.gegen[k].r===true});
+ render(); speichern();
+}
 
- caseEl.innerHTML=
- '<div class="casebar"><span>Auswertung</span><span class="pts">'+FAELLE.length+' Fälle</span></div>'+
- '<div class="ergebnis">'+
-  '<p class="zahl">'+S.punkte+'<small>von '+MAX+'</small></p>'+
-  '<h2 class="titel">'+titel+'</h2>'+
-  '<p class="deutung">'+deutung+'</p>'+
-  '<div class="bilanz">'+proEbene.map(r=>
-    '<div class="row"><span class="c">'+r.e.code+'</span>'+
-    '<span class="n">'+r.e.name+'<em>'+r.e.term+'</em></span>'+
-    '<span class="meter"><i style="width:'+(r.n?Math.round(r.ok/r.n*100):0)+'%"></i></span>'+
-    '<span class="v">'+r.ok+'/'+r.n+'</span></div>').join("")+
-  '</div>'+
-  '<p class="hinweis" style="margin-top:10px">Erkannte Diagnosen je Ebene &mdash; '+treffer+' von '+FAELLE.length+' insgesamt.</p>'+
-  '<div class="weiter"><h3>Die drei Fragen, die in fast jeder Auseinandersetzung helfen</h3>'+
-   '<ul>'+
-   '<li class="q">Auf welcher Ebene streite ich gerade?</li>'+
-   '<li class="q">Auf welcher Ebene spricht mein Gegenüber?</li>'+
-   '<li class="q">Welche Ebene meines eigenen Hauses prüfe ich gerade nicht?</li>'+
-   '</ul>'+
-   '<p style="margin-top:14px;font-size:14.5px;color:var(--ink-2)">Die dritte ist die schwerste. Die entscheidende Frage lautet nicht: Wer hat recht? Sondern: Von welchem Haus aus sprechen wir?</p>'+
-  '</div>'+
-  '<div class="actions"><button class="btn" type="button" id="again">Noch einmal spielen</button></div>'+
- '</div>';
- document.getElementById("again").onclick=()=>{intro();speichern();};
+/* ---------- Klicks ---------- */
+function verdrahten(){
+ const offen=caseEl.querySelector(".opt:not([disabled])");
+ if(offen){
+  const box=offen.closest(".opts");
+  box.addEventListener("click",ev=>{
+   const b=ev.target.closest(".opt"); if(!b||b.disabled) return;
+   const k=+b.dataset.k;
+   if(S.modus===1) waehleHandlung(k);
+   else if(S.phase==="p1") waehlePraemisse(k);
+   else waehleGegen(k);
+  });
+ }
+ const n=caseEl.querySelector("#next");
+ if(n) n.onclick=()=>{
+  const letzte=S.modus===1?FAELLE.length-1:SAETZE.length-1;
+  if(S.i===letzte){S.phase="ende";}
+  else{S.i++;S.phase=S.modus===1?"dx":"p1";S.a1=null;S.a2=null;}
+  render();
+ };
+}
+
+/* ---------- Auswertung ---------- */
+function ende(){
+ if(S.modus===1) endeModus1(); else endeModus2();
  window.scrollTo({top:0,behavior:"smooth"});
  speichern();
 }
 
-/* ---- Zustand über Neuveröffentlichungen retten ---- */
+function endeModus1(){
+ schnittLive(false);
+ EBENEN.forEach(e=>{if(bandEls[e.id]){bandEls[e.id].className="band";bandEls[e.id].querySelector(".mk").textContent="";}});
+ sKopf("Deine Karte","Die Ebenen bleiben. Was sich ändert, ist, auf welcher du zuerst nachsiehst.");
+
+ const treffer=S.log.filter(l=>l.ok1).length;
+ const spruenge=S.log.filter(l=>l.p===0).length;
+ const daneben=S.log.filter(l=>!l.ok1);
+ let delta=0; daneben.forEach(l=>{delta+=TIEFE[l.dx]-TIEFE[l.ebene];});
+ const schnitt=daneben.length?delta/daneben.length:0;
+
+ let titel = S.punkte>=34?"Architekturbewusstsein":S.punkte>=25?"Du siehst das Haus":S.punkte>=15?"Zwischen den Etagen":"Willkommen im Möbelstreit";
+ let deutung;
+ if(daneben.length===0) deutung="Zehn von zehn Diagnosen richtig. Das Werkzeug sitzt. Die schwerere Übung beginnt dort, wo du selbst im Raum stehst: Welche Ebene deines eigenen Hauses prüfst du gerade nicht?";
+ else if(schnitt<=-0.5) deutung="Deine Fehldiagnosen liegen fast alle weiter oben als der Konflikt. Du suchst das Problem dort, wo es sichtbar ist — bei Maßnahmen, Zahlen, Formulierungen. Das ist die häufigste Richtung des Ebenen-Sprungs und der Grund, warum gute Kompromisse scheitern.";
+ else if(schnitt>=0.5) deutung="Deine Fehldiagnosen liegen weiter unten als der Konflikt. Du vermutest Fundament und Weltbild, wo Möbel und Wände gemeint sind. Das Werkzeug ist scharf — aber wer überall Tiefe sucht, verwandelt den Ebenen-Check selbst in ein Ritual.";
+ else deutung="Deine Fehldiagnosen gehen in beide Richtungen — mal zu flach, mal zu tief. Keine feste Schlagseite, aber auch noch kein sicherer Blick für die Etage.";
+ if(spruenge>0) deutung+=" Bei "+spruenge+" von "+FAELLE.length+" Fällen hat deine Handlung auf einer Ebene angesetzt, auf der das Problem nicht lag.";
+
+ const proEbene=EBENEN.map(e=>{
+  const alle=S.log.filter(l=>l.ebene===e.id);
+  return {e:e,ok:alle.filter(l=>l.ok1).length,n:alle.length};
+ });
+
+ caseEl.classList.remove("gelesen");
+ caseEl.innerHTML=casebar("Auswertung · Modus 1",FAELLE.length+" Fälle")+
+ '<div class="ergebnis"><p class="zahl">'+S.punkte+'<small>von '+MAX1+'</small></p>'+
+ '<h2 class="titel">'+titel+'</h2><p class="deutung">'+deutung+'</p>'+
+ '<div class="bilanz">'+proEbene.map(r=>
+   '<div class="row"><span class="c">'+r.e.code+'</span><span class="n">'+r.e.name+'<em>'+r.e.term+'</em></span>'+
+   '<span class="meter"><i style="width:'+(r.n?Math.round(r.ok/r.n*100):0)+'%"></i></span>'+
+   '<span class="v">'+r.ok+'/'+r.n+'</span></div>').join("")+'</div>'+
+ '<p class="hinweis" style="margin-top:10px">Erkannte Diagnosen je Ebene — '+treffer+' von '+FAELLE.length+' insgesamt.</p>'+
+ '<div class="weiter"><h3>Die drei Fragen, die in fast jeder Auseinandersetzung helfen</h3><ul>'+
+  '<li class="q">Auf welcher Ebene streite ich gerade?</li>'+
+  '<li class="q">Auf welcher Ebene spricht mein Gegenüber?</li>'+
+  '<li class="q">Welche Ebene meines eigenen Hauses prüfe ich gerade nicht?</li></ul>'+
+  '<p style="margin-top:14px;font-size:14.5px;color:var(--ink-2)">Die dritte ist die schwerste. Die entscheidende Frage lautet nicht: Wer hat recht? Sondern: Von welchem Haus aus sprechen wir?</p></div>'+
+ '<div class="actions"><button class="btn" type="button" id="m2go">Modus 2 starten: Die Prämisse finden</button>'+
+ '<button class="btn ghost" type="button" id="again">Noch einmal</button></div></div>';
+ document.getElementById("m2go").onclick=()=>starte(2);
+ document.getElementById("again").onclick=()=>starte(1);
+}
+
+function endeModus2(){
+ const ok1=S.log.filter(l=>l.ok1).length, ok2=S.log.filter(l=>l.ok2).length;
+ sKopf("Dein Fundamentplan","Elf Annahmen, die selten ausgesprochen werden — und fast immer mitspielen.");
+
+ let titel = S.punkte>=38?"Du siehst das Wasser":S.punkte>=28?"Der Blick schärft sich":S.punkte>=17?"Noch mitten im Selbstverständlichen":"Das Wasser ist noch unsichtbar";
+ let deutung;
+ if(ok1===SAETZE.length&&ok2===SAETZE.length) deutung="Alle elf Annahmen benannt und alle elf Verkleidungen durchschaut. Dann bleibt die unbequeme Hälfte der Übung: Welche dieser Prämissen sind deine eigenen — und welche davon möchtest du behalten?";
+ else if(ok1-ok2>=2) deutung="Du benennst die Annahme zuverlässiger, als du sie wiedererkennst, wenn sie die Kleidung wechselt. Genau davon leben Prämissen: Sie treten selten zweimal im selben Satz auf.";
+ else if(ok2-ok1>=2) deutung="Du spürst die Verwandtschaft zwischen Sätzen, bevor du die Annahme benennen kannst. Das ist der bessere Ausgangspunkt — die Benennung lässt sich nachholen, das Gespür nicht so leicht.";
+ else deutung="Benennen und Wiedererkennen liegen bei dir gleichauf. Was jetzt hilft, ist nicht mehr Theorie, sondern Material: Sätze aus der eigenen Woche, nicht aus einem Spiel.";
+ deutung+=" Benannt: "+ok1+" von "+SAETZE.length+". Gegencheck bestanden: "+ok2+" von "+SAETZE.length+".";
+
+ caseEl.classList.remove("gelesen");
+ caseEl.innerHTML=casebar("Auswertung · Modus 2",SAETZE.length+" Sätze")+
+ '<div class="ergebnis"><p class="zahl">'+S.punkte+'<small>von '+MAX2+'</small></p>'+
+ '<h2 class="titel">'+titel+'</h2><p class="deutung">'+deutung+'</p>'+
+ '<div class="bilanz">'+SAETZE.map((s,k)=>{
+   const e=S.log.find(x=>x.k===k)||{};
+   return '<div class="row" style="grid-template-columns:34px 1fr 46px"><span class="c">P'+String(k+1).padStart(2,"0")+'</span>'+
+     '<span class="n">'+s.kurz+'<em>'+s.familie+'</em></span>'+
+     '<span class="v" style="color:'+(e.ok1?"var(--ok)":"var(--mark)")+'">'+(e.ok1?"✓":"✕")+'</span></div>';
+  }).join("")+'</div>'+
+ '<p class="hinweis" style="margin-top:10px">Dein Fundamentplan — ✓ steht für die Annahmen, die du beim ersten Anlauf benannt hast.</p>'+
+ '<div class="weiter"><h3>Der Satz, der unter allen elf liegt</h3>'+
+  '<p class="q" style="font-size:19px;margin-top:8px">Der Glaube, es gebe nur eine Wirklichkeit, ist die gefährlichste Selbsttäuschung.</p>'+
+  '<p style="margin-top:12px;font-size:14.5px;color:var(--ink-2)">Paul Watzlawick. Und die drei Fragen, mit denen Teil IV weiterarbeitet, zielen genau dorthin: <span class="q">Wer bin ich? Was ist Leben? Was ist ein Anderer?</span> Wer diese drei Bereiche kennt, kennt seine wichtigsten Prämissen.</p></div>'+
+ '<div class="actions"><button class="btn" type="button" id="m1go">Modus 1 starten: Die Ebene finden</button>'+
+ '<button class="btn ghost" type="button" id="again">Noch einmal</button></div></div>';
+ document.getElementById("m1go").onclick=()=>starte(1);
+ document.getElementById("again").onclick=()=>starte(2);
+}
+
+/* ---------- Zustand über Neuveröffentlichungen retten ---------- */
 function speichern(){ try{ window.claude?.hot?.snapshot?.(S); }catch(e){} }
 function start(data){
- if(data&&data.log&&typeof data.i==="number"&&data.phase&&data.phase!=="intro"){
-  S=data;
-  if(S.phase==="dx"){render();}
-  else if(S.phase==="ende"){ende();}
-  else{schnittMarkieren(S.dx,FAELLE[S.i].ebene);render();}
- }else{ intro(); }
+ try{
+  if(data&&data.phase&&data.phase!=="menu"&&Array.isArray(data.log)){
+   S=data;
+   if(S.modus===1){
+    seiteSchnitt();
+    subline.textContent="Modus 1 — Die Ebene finden: Möbel, Wände, Fundament, Bauplan oder Landschaft.";
+    if(S.phase!=="dx"&&S.phase!=="ende") schnittMarkieren(S.a1,FAELLE[S.i].ebene);
+    render();
+   }else if(S.modus===2){
+    seiteRegister();
+    subline.textContent="Modus 2 — Die Prämisse finden: Welche Annahme muss gelten, damit ein Satz selbstverständlich klingt?";
+    render();
+   }else menue();
+   return;
+  }
+ }catch(e){}
+ menue();
 }
 try{
  if(window.claude?.hot?.ready) window.claude.hot.ready(start);
  else start(window.claude?.hot?.data ?? {});
-}catch(e){ intro(); }
+}catch(e){ menue(); }
 </script>
